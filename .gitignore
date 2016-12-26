@@ -3,6 +3,9 @@
 
 node_modules
 
+_fun
 dist
-coverage
+es
 lib
+coverage
+_book

@@ -1,6 +1,9 @@
+_fun/**
 blueprints/**/files/**
 coverage/**
-node_modules/**
 dist/**
+es/**
+lib/**
+node_modules/**
 *.spec.js
 src/index.html

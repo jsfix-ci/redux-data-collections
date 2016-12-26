@@ -1,16 +1,9 @@
-export {
-  makeCollection,
-  createCollectionSelectors,
-  makeCollectionConstants,
-  makeCollectionActions,
-  makeCollectionReducer
-} from './collection'
+import reducer from './reducers'
 
-export {
-  createEntitySelectors,
-  makeEntityConstants,
-  makeEntityActions,
-  makeEntityReducer
-} from './entity'
+export * from './actions'
+export * from './constants'
+export * from './middleware'
+export * from './reducers'
+export * from './selectors'
 
-export makeMiddleware from './middleware'
+export default reducer
