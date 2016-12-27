@@ -6,8 +6,9 @@ import {
   REDUX_DATA_ITEM_DELETE,
   REDUX_DATA_ITEM_DESTROY,
 
-  REDUX_DATA_ITEM_ATTRIBUTES_FOR_EACH,
+  REDUX_DATA_ITEM_ATTRIBUTES_MAP,
   REDUX_DATA_ITEM_ATTRIBUTES_ROLLBACK,
+  REDUX_DATA_ITEM_ATTRIBUTES_SET,
   REDUX_DATA_ITEM_ATTRIBUTE_SET,
   REDUX_DATA_ITEM_ATTRIBUTE_RESET,
   REDUX_DATA_ITEM_ATTRIBUTE_TOGGLE,
@@ -33,8 +34,10 @@ export const deleteItem = createAction(REDUX_DATA_ITEM_DELETE)
 // payload: { type, id }
 export const destroyItem = createAction(REDUX_DATA_ITEM_DESTROY)
 
-export const forEachAttribute = createAction(REDUX_DATA_ITEM_ATTRIBUTES_FOR_EACH)
+export const mapAttributes = createAction(REDUX_DATA_ITEM_ATTRIBUTES_MAP)
 export const rollbackAttributes = createAction(REDUX_DATA_ITEM_ATTRIBUTES_ROLLBACK)
+
+export const setAttributes = createAction(REDUX_DATA_ITEM_ATTRIBUTES_SET)
 
 // payload: { type, id, attribute, value }
 export const setAttribute = createAction(REDUX_DATA_ITEM_ATTRIBUTE_SET)

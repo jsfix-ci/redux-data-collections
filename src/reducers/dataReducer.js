@@ -1,4 +1,5 @@
 import { handleActions } from 'redux-actions'
+import reduceReducers from 'reduce-reducers'
 import { pluralize } from 'inflection'
 import itemReducer from './itemReducer'
 import {
@@ -17,13 +18,18 @@ import {
 } from '../constants/listConstants'
 
 const mapActionToItemReducer = (type, id) => (state, action) => {
+  if (type === undefined || id === undefined) { return state }
   const item = state.find(i => i.type === type && i.id === id)
   if (!item) { return state }
   return state.map(i => i === item ? itemReducer(i, action) : i)
 }
 
 const listReducer = handleActions({
-  [REDUX_DATA_ITEM_CREATE_NEW]: (state, action) => state,
+  [REDUX_DATA_ITEM_CREATE_NEW]: (state, action) => {
+    const { payload } = action || {}
+    const { type } = payload
+    return [...state, itemReducer(payload[type], action)]
+  },
   [REDUX_DATA_LIST_CONCAT]: (state, action) => {
     const { payload } = action || {}
     const { type } = payload
@@ -87,11 +93,10 @@ const dataReducer = (type) => (state = [], action) => {
   const { payload } = action || {}
   if (!payload || payload.type !== type) { return state }
 
-  // TODO: some item actions (delete, destroy) should happen in the list, not in the item
-  if (payload.id) {
-    return mapActionToItemReducer(payload.type, payload.id)(state, action)
-  }
-  return listReducer(state, action)
+  return reduceReducers(
+    mapActionToItemReducer(payload.type, payload.id),
+    listReducer
+  )(state, action)
 }
 
 export default dataReducer
