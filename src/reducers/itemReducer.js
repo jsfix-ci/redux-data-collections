@@ -6,68 +6,20 @@ import relationshipsReducer from './relationshipsReducer'
 import {
   REDUX_DATA_ITEM_CREATE_NEW,
   REDUX_DATA_ITEM_SAVE,
-  REDUX_DATA_ITEM_ATTRIBUTES_MAP,
   REDUX_DATA_ITEM_ATTRIBUTES_ROLLBACK,
-  REDUX_DATA_ITEM_ATTRIBUTES_SET,
-  REDUX_DATA_ITEM_ATTRIBUTE_SET,
-  REDUX_DATA_ITEM_ATTRIBUTE_RESET,
-  REDUX_DATA_ITEM_ATTRIBUTE_TOGGLE,
-  REDUX_DATA_ITEM_ATTRIBUTE_DELETE
+  REDUX_DATA_ITEM_ATTRIBUTE_TOGGLE
 } from '../constants/itemConstants'
 
 // TODO: move to another file
 // TODO: mark in meta.changedAttributes
-const attributeReducer = handleActions({
-  [REDUX_DATA_ITEM_ATTRIBUTE_SET]: (state, action) => action.payload.value,
-  [REDUX_DATA_ITEM_ATTRIBUTE_RESET]: (state, action) => state, // TODO: pull from meta.changedAttributes
-  [REDUX_DATA_ITEM_ATTRIBUTE_TOGGLE]: (state, action) => !state,
-  [REDUX_DATA_ITEM_ATTRIBUTE_DELETE]: (state, action) => undefined
-}, '')
-
-const mapActionToAttributeReducer = (state, action) => {
-  action.type === undefined && console.log(action)
-  const { payload } = action
-  if (!payload) { return state }
-
-  const { attribute } = payload
-  if (!attribute) { return state }
-
-  return {
-    ...state,
-    [attribute]: attributeReducer(state[attribute], action)
-  }
-}
-
-// TODO: move to another file
-const attributesReducer = handleActions({
-  [REDUX_DATA_ITEM_ATTRIBUTES_MAP]: (state, action) => {
-    if (!action) { return state }
-    const { payload } = action
-    if (!payload) { return state }
-    const { map } = payload
-    const keys = Object.keys(state)
-    return keys.map(key => map(state[key], key, state)).reduce((attributes, value, i) => {
-      attributes[keys[i]] = value
-      return attributes
-    }, {})
-  },
-  [REDUX_DATA_ITEM_ATTRIBUTES_ROLLBACK]: (state, action) => {
-    console.log(REDUX_DATA_ITEM_ATTRIBUTES_ROLLBACK)
-    return state
-  },
-  // TODO: REDUX_DATA_ITEM_ATTRIBUTES_SET -- set many
-  [REDUX_DATA_ITEM_ATTRIBUTE_SET]: mapActionToAttributeReducer,
-  [REDUX_DATA_ITEM_ATTRIBUTE_RESET]: mapActionToAttributeReducer,
-  [REDUX_DATA_ITEM_ATTRIBUTE_TOGGLE]: mapActionToAttributeReducer,
-  [REDUX_DATA_ITEM_ATTRIBUTE_DELETE]: mapActionToAttributeReducer
-}, {})
+import metaReducer from './itemMetaReducer'
+import attributesReducer from './attributesReducer'
 
 const identityReducer = (initialState = {}) => (state = initialState) => state
 
 const itemReducer = handleActions({
   [REDUX_DATA_ITEM_CREATE_NEW]: (state, action) => {
     const { payload } = action
-    if (!payload) { return state }
     const { type } = payload
     const item = { ...state, meta: state.meta || {} }
 
@@ -87,60 +39,64 @@ const itemReducer = handleActions({
 
   // TODO: save should really be happening in the middleware
   [REDUX_DATA_ITEM_SAVE]: (state, action) => {
-    const { payload } = action
-    if (!payload) { return state }
     const { changedAttributes } = state.meta
     const item = {
       ...state,
-      attributes: { ...state.attributes, ...changedAttributes },
-      meta: {
-        ...state.meta,
-        changedAttributes: {},
-        isSaved: true
-      }
+      attributes: { ...state.attributes, ...changedAttributes }
     }
 
     return item
   },
   [REDUX_DATA_ITEM_ATTRIBUTES_ROLLBACK]: (state, action) => {
-    const { payload } = action
-    if (!payload) { return state }
-    const item = {
-      ...state,
-      meta: { ...state.meta, changedAttributes: {} }
+    const { meta } = state || {}
+    const { changedAttributes, deletedAttributes } = meta
+    const hasChangedAttributes = !!changedAttributes && !!Object.keys(changedAttributes).length
+    const hasDeletedAttributes = !!deletedAttributes && !!deletedAttributes.length
+    const newState = { ...state }
+    if (hasChangedAttributes) {
+      delete newState.meta.changedAttributes
     }
+    if (hasDeletedAttributes) {
+      delete newState.meta.deletedAttributes
+    }
+    newState.meta.isSaved = true
 
-    return item
+    return newState
   },
-  [REDUX_DATA_ITEM_ATTRIBUTES_SET]: (state, action) => {
+  [REDUX_DATA_ITEM_ATTRIBUTE_TOGGLE]: (state, action) => {
     const { payload } = action
-    if (!payload) { return state }
-    const { attributes } = payload
-    const { changedAttributes } = state.meta
+    const { attribute } = payload
+    const value = state.attributes[attribute]
 
-    return {
-      ...state,
-      meta: {
-        ...state.meta,
-        changedAttributes: {
-          ...changedAttributes,
-          ...attributes
-        },
-        isSaved: false
-      }
+    const newAction = {
+      ...action,
+      meta: { ...action.meta, value }
     }
+    return { ...state, meta: metaReducer(state.meta, newAction) }
   }
 }, {})
 
-export default reduceReducers(
-  itemReducer,
-  combineReducers({
-    type: identityReducer(''),
-    id: identityReducer(''),
-    attributes: attributesReducer,
-    relationships: relationshipsReducer,
+const skipActions = (constants = []) => reducer => (state, action) => {
+  if (!constants.includes(action.type)) {
+    return reducer(state, action)
+  }
+  return state
+}
 
-    // TODO: meta
-    meta: identityReducer()
-  })
-)
+export default (state, action) => {
+  const { payload } = action
+  if (!payload) { return state }
+
+  return reduceReducers(
+    itemReducer,
+    combineReducers({
+      type: identityReducer(''),
+      id: identityReducer(''),
+      attributes: attributesReducer,
+      relationships: relationshipsReducer,
+
+      // TODO: meta
+      meta: skipActions([REDUX_DATA_ITEM_ATTRIBUTE_TOGGLE])(metaReducer)
+    })
+  )(state, action)
+}

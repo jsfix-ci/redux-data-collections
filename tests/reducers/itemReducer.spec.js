@@ -36,28 +36,18 @@ describe('Reducers', () => {
     })
   })
 
-  // TODO: save new item
   describe('save', () => {
     const initialState = makePost({
-      attributes: {
-        name: 'Original value'
-      },
+      attributes: { name: 'Original value' },
       meta: {
-        changedAttributes: {
-          name: 'New Value'
-        },
+        changedAttributes: { name: 'New Value' },
         isSaved: false
       }
     })
     const expectedState = {
       ...initialState,
-      attributes: {
-        name: 'New Value'
-      },
-      meta: {
-        changedAttributes: {},
-        isSaved: true
-      }
+      attributes: { name: 'New Value' },
+      meta: { isSaved: true }
     }
 
     const payload = { type: 'post', id: initialState.id }
@@ -112,7 +102,22 @@ describe('Reducers', () => {
     })
     const expectedState = {
       ...initialState,
-      meta: { changedAttributes: {}, isSaved: false }
+      meta: { isSaved: true }
+    }
+    const payload = { type: 'post', id: initialState.id }
+    const action = rollbackAttributes(payload)
+    const state = itemReducer(initialState, action)
+    expect(state).toEqual(expectedState)
+  })
+
+  describe('rollbackAttributes with deletedAttributes', () => {
+    const initialState = makePost({
+      attributes: { name: 'Old', description: 'Something' },
+      meta: { changedAttributes: { name: 'New' }, deletedAttributes: ['description'], isSaved: false }
+    })
+    const expectedState = {
+      ...initialState,
+      meta: { isSaved: true }
     }
     const payload = { type: 'post', id: initialState.id }
     const action = rollbackAttributes(payload)
@@ -132,7 +137,6 @@ describe('Reducers', () => {
     expect(state).toEqual(expectedState)
   })
 
-  // TODO: set attribute
   describe('setAttribute', () => {
     const initialState = makePost()
     const expectedState = { ...initialState, meta: { changedAttributes: { foo: 'bar' }, isSaved: false } }
@@ -144,7 +148,25 @@ describe('Reducers', () => {
 
   describe('resetAttribute', () => {
     const initialState = makePost({ meta: { changedAttributes: { foo: 'bar' }, isSaved: false } })
-    const expectedState = { ...initialState, meta: { changedAttributes: {}, isSaved: true } }
+    const expectedState = { ...initialState, meta: { isSaved: true } }
+    const payload = { type: 'post', id: initialState.id, attribute: 'foo' }
+    const action = resetAttribute(payload)
+    const state = itemReducer(initialState, action)
+    expect(state).toEqual(expectedState)
+  })
+
+  describe('resetAttribute as only deletedAttribute', () => {
+    const initialState = makePost({ meta: { deletedAttributes: ['foo'], isSaved: false } })
+    const expectedState = { ...initialState, meta: { isSaved: true } }
+    const payload = { type: 'post', id: initialState.id, attribute: 'foo' }
+    const action = resetAttribute(payload)
+    const state = itemReducer(initialState, action)
+    expect(state).toEqual(expectedState)
+  })
+
+  describe('resetAttribute with many deletedAttributes', () => {
+    const initialState = makePost({ meta: { deletedAttributes: ['foo', 'bar'], isSaved: false } })
+    const expectedState = { ...initialState, meta: { isSaved: true } }
     const payload = { type: 'post', id: initialState.id, attribute: 'foo' }
     const action = resetAttribute(payload)
     const state = itemReducer(initialState, action)
@@ -160,9 +182,63 @@ describe('Reducers', () => {
     expect(state).toEqual(expectedState)
   })
 
+  describe('toggleAttribute as only changedAttribute', () => {
+    const initialState = makePost({
+      attributes: { foo: true },
+      meta: { changedAttributes: { foo: false }, isSaved: false }
+    })
+    const expectedState = { ...initialState, meta: { isSaved: true } }
+    const payload = { type: 'post', id: initialState.id, attribute: 'foo' }
+    const action = toggleAttribute(payload)
+    const state = itemReducer(initialState, action)
+    expect(state).toEqual(expectedState)
+  })
+
+  describe('toggleAttribute with many changedAttributes', () => {
+    const initialState = makePost({
+      attributes: { foo: true, bar: 'old' },
+      meta: { changedAttributes: { foo: false, bar: 'new' }, isSaved: false }
+    })
+    const expectedState = { ...initialState, meta: { changedAttributes: { bar: 'new' }, isSaved: false } }
+    const payload = { type: 'post', id: initialState.id, attribute: 'foo' }
+    const action = toggleAttribute(payload)
+    const state = itemReducer(initialState, action)
+    expect(state).toEqual(expectedState)
+  })
+
   describe('deleteAttribute', () => {
     const initialState = makePost({ attributes: { foo: true } })
     const expectedState = { ...initialState, meta: { deletedAttributes: ['foo'], isSaved: false } }
+    const payload = { type: 'post', id: initialState.id, attribute: 'foo' }
+    const action = deleteAttribute(payload)
+    const state = itemReducer(initialState, action)
+    expect(state).toEqual(expectedState)
+  })
+
+  describe('deleteAttribute as only changedAttribute', () => {
+    const initialState = makePost({
+      attributes: { foo: true },
+      meta: { changedAttributes: { foo: false } }
+    })
+    const expectedState = {
+      ...initialState,
+      meta: { deletedAttributes: ['foo'], isSaved: false }
+    }
+    const payload = { type: 'post', id: initialState.id, attribute: 'foo' }
+    const action = deleteAttribute(payload)
+    const state = itemReducer(initialState, action)
+    expect(state).toEqual(expectedState)
+  })
+
+  describe('deleteAttribute with many changedAttributes', () => {
+    const initialState = makePost({
+      attributes: { foo: true, bar: 'old' },
+      meta: { changedAttributes: { foo: false, bar: 'new' } }
+    })
+    const expectedState = {
+      ...initialState,
+      meta: { changedAttributes: { bar: 'new' }, deletedAttributes: ['foo'], isSaved: false }
+    }
     const payload = { type: 'post', id: initialState.id, attribute: 'foo' }
     const action = deleteAttribute(payload)
     const state = itemReducer(initialState, action)
