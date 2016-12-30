@@ -8,6 +8,14 @@ import {
   REDUX_DATA_ITEM_ATTRIBUTE_DELETE
 } from 'constants/itemConstants'
 
+const removeAttribute = (state, action) => {
+  const { payload } = action
+  const { attribute } = payload
+  const newState = { ...state }
+  delete newState[attribute]
+  return newState
+}
+
 const changedAttributesReducer = handleActions({
   [REDUX_DATA_ITEM_ATTRIBUTE_SET]: (state, action) => {
     const { payload } = action
@@ -17,13 +25,7 @@ const changedAttributesReducer = handleActions({
       [attribute]: value
     }
   },
-  [REDUX_DATA_ITEM_ATTRIBUTE_RESET]: (state, action) => {
-    const { payload } = action
-    const { attribute } = payload
-    const newState = { ...state }
-    delete newState[attribute]
-    return newState
-  },
+  [REDUX_DATA_ITEM_ATTRIBUTE_RESET]: removeAttribute,
   [REDUX_DATA_ITEM_ATTRIBUTE_TOGGLE]: (state, action) => {
     const { payload, meta } = action
     const { value } = meta || {}
@@ -39,14 +41,7 @@ const changedAttributesReducer = handleActions({
       [attribute]: newValue
     }
   },
-  // NOTE: dupe of REDUX_DATA_ITEM_ATTRIBUTE_RESET
-  [REDUX_DATA_ITEM_ATTRIBUTE_DELETE]: (state, action) => {
-    const { payload } = action
-    const { attribute } = payload
-    const newState = { ...state }
-    delete newState[attribute]
-    return newState
-  }
+  [REDUX_DATA_ITEM_ATTRIBUTE_DELETE]: removeAttribute
 }, '')
 
 const deletedAttributesReducer = handleActions({

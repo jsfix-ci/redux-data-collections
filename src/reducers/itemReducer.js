@@ -10,8 +10,6 @@ import {
   REDUX_DATA_ITEM_ATTRIBUTE_TOGGLE
 } from '../constants/itemConstants'
 
-// TODO: move to another file
-// TODO: mark in meta.changedAttributes
 import metaReducer from './itemMetaReducer'
 import attributesReducer from './attributesReducer'
 
@@ -76,6 +74,7 @@ const itemReducer = handleActions({
   }
 }, {})
 
+// wraps a reducer, skips actions in the constants array
 const skipActions = (constants = []) => reducer => (state, action) => {
   if (!constants.includes(action.type)) {
     return reducer(state, action)
@@ -94,8 +93,6 @@ export default (state, action) => {
       id: identityReducer(''),
       attributes: attributesReducer,
       relationships: relationshipsReducer,
-
-      // TODO: meta
       meta: skipActions([REDUX_DATA_ITEM_ATTRIBUTE_TOGGLE])(metaReducer)
     })
   )(state, action)
