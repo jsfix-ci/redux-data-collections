@@ -49,6 +49,7 @@
   "homepage": "https://github.com/heygrady/redux-data#readme",
   "dependencies": {
     "inflection": "^1.10.0",
+    "invariant": "^2.2.2",
     "lodash.memoize": "^4.1.0",
     "lodash.snakecase": "^4.0.1",
     "lodash.upperfirst": "^4.2.0",

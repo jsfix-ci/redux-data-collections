@@ -32,6 +32,6 @@ const relationshipsReducer = (relationships = []) => (state = {}, action) => {
   relationships.reduce((_, config) => {
     reducers[config.key] = relationshipReducer(config)
   }, reducers)
-  return combineReducers(reducers)(state, action)
+  return relationships.length ? combineReducers(reducers)(state, action) : state
 }
 export default relationshipsReducer

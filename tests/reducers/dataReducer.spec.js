@@ -14,6 +14,11 @@ const makePost = ({ attributes = {}, relationships = {}, meta = {} } = {}) => {
     meta
   }
 }
+const relationships = undefined
+// [
+//   { key: 'author', isOne: true, accepts: ['person'] },
+//   { key: 'comments', isOne: false, accepts: ['comment'] }
+// ]
 describe('Reducers', () => {
   describe('dataReducer', () => {
     it('returns reducer function for dataReducer()', () => {
@@ -32,7 +37,7 @@ describe('Reducers', () => {
       const initialState = data
       const expectedState = [...data, payload.post]
       const action = createNew(payload)
-      const reducer = dataReducer('post')
+      const reducer = dataReducer('post', relationships)
       const state = reducer(initialState, action)
       expect(state).toEqual(expectedState)
     })
@@ -42,7 +47,7 @@ describe('Reducers', () => {
       const initialState = data
       const expectedState = [...data, payload.post]
       const action = concat(payload)
-      const reducer = dataReducer('post')
+      const reducer = dataReducer('post', relationships)
       const state = reducer(initialState, action)
       expect(state).toEqual(expectedState)
     })
@@ -52,7 +57,7 @@ describe('Reducers', () => {
       const initialState = data
       const expectedState = [...data, ...payload.posts]
       const action = concat(payload)
-      const reducer = dataReducer('post')
+      const reducer = dataReducer('post', relationships)
       const state = reducer(initialState, action)
       expect(state).toEqual(expectedState)
     })
@@ -65,7 +70,7 @@ describe('Reducers', () => {
       const initialState = data
       const expectedState = [data[1]]
       const action = filter(payload)
-      const reducer = dataReducer('post')
+      const reducer = dataReducer('post', relationships)
       const state = reducer(initialState, action)
       expect(state).toEqual(expectedState)
     })
@@ -83,7 +88,7 @@ describe('Reducers', () => {
       }
       const initialState = data
       const action = map(payload)
-      const reducer = dataReducer('post')
+      const reducer = dataReducer('post', relationships)
       const state = reducer(initialState, action)
       expect(state.every(p => p.meta.mapped)).toBe(true)
     })
@@ -93,7 +98,7 @@ describe('Reducers', () => {
       const initialState = data
       const expectedState = [...data, payload.post]
       const action = push(payload)
-      const reducer = dataReducer('post')
+      const reducer = dataReducer('post', relationships)
       const state = reducer(initialState, action)
       expect(state).toEqual(expectedState)
     })
@@ -103,7 +108,7 @@ describe('Reducers', () => {
       const initialState = data
       const expectedState = [...data, ...payload.posts]
       const action = push(payload)
-      const reducer = dataReducer('post')
+      const reducer = dataReducer('post', relationships)
       const state = reducer(initialState, action)
       expect(state).toEqual(expectedState)
     })
@@ -113,7 +118,7 @@ describe('Reducers', () => {
       const initialState = data
       const expectedState = [...data].reverse()
       const action = reverse(payload)
-      const reducer = dataReducer('post')
+      const reducer = dataReducer('post', relationships)
       const state = reducer(initialState, action)
       expect(state).toEqual(expectedState)
     })
@@ -123,7 +128,7 @@ describe('Reducers', () => {
       const initialState = data
       const expectedState = [data[0]]
       const action = slice(payload)
-      const reducer = dataReducer('post')
+      const reducer = dataReducer('post', relationships)
       const state = reducer(initialState, action)
       expect(state).toEqual(expectedState)
     })
@@ -148,7 +153,7 @@ describe('Reducers', () => {
       ]
       const expectedState = [initialState[2], initialState[1], initialState[0]]
       const action = sort(payload)
-      const reducer = dataReducer('post')
+      const reducer = dataReducer('post', relationships)
       const state = reducer(initialState, action)
       expect(state).toEqual(expectedState)
     })
@@ -158,7 +163,7 @@ describe('Reducers', () => {
       const initialState = data
       const expectedState = [...data]
       const action = splice(payload)
-      const reducer = dataReducer('post')
+      const reducer = dataReducer('post', relationships)
       const state = reducer(initialState, action)
       expect(state).toEqual(expectedState)
     })
@@ -168,7 +173,7 @@ describe('Reducers', () => {
       const initialState = data
       const expectedState = [data[1]]
       const action = splice(payload)
-      const reducer = dataReducer('post')
+      const reducer = dataReducer('post', relationships)
       const state = reducer(initialState, action)
       expect(state).toEqual(expectedState)
     })
@@ -178,7 +183,7 @@ describe('Reducers', () => {
       const initialState = data
       const expectedState = [data[0], payload.post, data[1]]
       const action = splice(payload)
-      const reducer = dataReducer('post')
+      const reducer = dataReducer('post', relationships)
       const state = reducer(initialState, action)
       expect(state).toEqual(expectedState)
     })
@@ -188,7 +193,7 @@ describe('Reducers', () => {
       const initialState = data
       const expectedState = [data[0], ...payload.posts, data[1]]
       const action = splice(payload)
-      const reducer = dataReducer('post')
+      const reducer = dataReducer('post', relationships)
       const state = reducer(initialState, action)
       expect(state).toEqual(expectedState)
     })
@@ -198,7 +203,7 @@ describe('Reducers', () => {
       const initialState = data
       const expectedState = [payload.post, ...data]
       const action = unshift(payload)
-      const reducer = dataReducer('post')
+      const reducer = dataReducer('post', relationships)
       const state = reducer(initialState, action)
       expect(state).toEqual(expectedState)
     })
@@ -208,7 +213,7 @@ describe('Reducers', () => {
       const initialState = data
       const expectedState = [...payload.posts, ...data]
       const action = unshift(payload)
-      const reducer = dataReducer('post')
+      const reducer = dataReducer('post', relationships)
       const state = reducer(initialState, action)
       expect(state).toEqual(expectedState)
     })

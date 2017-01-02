@@ -83,16 +83,17 @@ const skipActions = (constants = []) => reducer => (state, action) => {
 }
 
 export default (state, action) => {
-  const { payload } = action
+  const { payload, meta } = action
+  const { type, relationships } = meta || {}
   if (!payload) { return state }
 
   return reduceReducers(
     itemReducer,
     combineReducers({
-      type: identityReducer(''),
+      type: identityReducer(type),
       id: identityReducer(''),
       attributes: attributesReducer,
-      relationships: relationshipsReducer,
+      relationships: relationshipsReducer(relationships),
       meta: skipActions([REDUX_DATA_ITEM_ATTRIBUTE_TOGGLE])(metaReducer)
     })
   )(state, action)

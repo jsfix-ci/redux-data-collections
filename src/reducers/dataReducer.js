@@ -24,6 +24,7 @@ const mapActionToItemReducer = (type, id) => (state, action) => {
   return state.map(i => i === item ? itemReducer(i, action) : i)
 }
 
+// TODO: should these alter the real array?
 const listReducer = handleActions({
   [REDUX_DATA_ITEM_CREATE_NEW]: (state, action) => {
     const { payload } = action || {}
@@ -33,6 +34,7 @@ const listReducer = handleActions({
   [REDUX_DATA_LIST_CONCAT]: (state, action) => {
     const { payload } = action || {}
     const { type } = payload
+    // TODO: stop using pluralize
     const types = pluralize(type)
     if (payload[type]) {
       return state.concat(payload[type])
@@ -89,14 +91,14 @@ const listReducer = handleActions({
   }
 }, [])
 
-const dataReducer = (type) => (state = [], action) => {
+const dataReducer = (type, relationships = []) => (state = [], action) => {
   const { payload } = action || {}
   if (!payload || payload.type !== type) { return state }
 
   return reduceReducers(
     mapActionToItemReducer(payload.type, payload.id),
     listReducer
-  )(state, action)
+  )(state, { ...action, meta: { ...action.meta, type, relationships } })
 }
 
 export default dataReducer

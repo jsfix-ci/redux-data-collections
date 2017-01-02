@@ -281,67 +281,140 @@ describe('Reducers', () => {
       expect(state).toEqual(expectedState)
     })
 
-    // it('map', () => {
-    //   const initialState = makeRelationships()
-    //   const expectedState = { ...initialState, key: 'temporary' }
-    //   const payload = { type: 'post', relationship: 'comments' }
-    //   const action = map(payload)
-    //   const state = relationshipsReducer(relationships)(initialState, action)
-    //   expect(state).toEqual(expectedState)
-    // })
-    //
-    // it('push', () => {
-    //   const initialState = makeRelationships()
-    //   const expectedState = { ...initialState, key: 'temporary' }
-    //   const payload = { type: 'post', relationship: 'comments' }
-    //   const action = push(payload)
-    //   const state = relationshipsReducer(relationships)(initialState, action)
-    //   expect(state).toEqual(expectedState)
-    // })
-    //
-    // it('reverse', () => {
-    //   const initialState = makeRelationships()
-    //   const expectedState = { ...initialState, key: 'temporary' }
-    //   const payload = { type: 'post', relationship: 'comments' }
-    //   const action = reverse(payload)
-    //   const state = relationshipsReducer(relationships)(initialState, action)
-    //   expect(state).toEqual(expectedState)
-    // })
-    //
-    // it('slice', () => {
-    //   const initialState = makeRelationships()
-    //   const expectedState = { ...initialState, key: 'temporary' }
-    //   const payload = { type: 'post', relationship: 'comments' }
-    //   const action = slice(payload)
-    //   const state = relationshipsReducer(relationships)(initialState, action)
-    //   expect(state).toEqual(expectedState)
-    // })
-    //
-    // it('sort', () => {
-    //   const initialState = makeRelationships()
-    //   const expectedState = { ...initialState, key: 'temporary' }
-    //   const payload = { type: 'post', relationship: 'comments' }
-    //   const action = sort(payload)
-    //   const state = relationshipsReducer(relationships)(initialState, action)
-    //   expect(state).toEqual(expectedState)
-    // })
-    //
-    // it('splice', () => {
-    //   const initialState = makeRelationships()
-    //   const expectedState = { ...initialState, key: 'temporary' }
-    //   const payload = { type: 'post', relationship: 'comments' }
-    //   const action = splice(payload)
-    //   const state = relationshipsReducer(relationships)(initialState, action)
-    //   expect(state).toEqual(expectedState)
-    // })
-    //
-    // it('unshift', () => {
-    //   const initialState = makeRelationships()
-    //   const expectedState = { ...initialState, key: 'temporary' }
-    //   const payload = { type: 'post', relationship: 'comments' }
-    //   const action = unshift(payload)
-    //   const state = relationshipsReducer(relationships)(initialState, action)
-    //   expect(state).toEqual(expectedState)
-    // })
+    it('map', () => {
+      const mapFunc = (state, action) => ({ ...state, meta: { ...state.meta, isMapped: true } })
+      const initialState = makeRelationships()
+      const expectedState = {
+        ...initialState,
+        comments: {
+          ...initialState.comments,
+          meta: {
+            changedData: initialState.comments.data.map(mapFunc)
+          }
+        }
+      }
+      const payload = { type: 'post', relationship: 'comments', map: mapFunc }
+      const action = map(payload)
+      const state = relationshipsReducer(relationships)(initialState, action)
+      expect(state).toEqual(expectedState)
+    })
+
+    it('push one comment', () => {
+      const comment = { type: 'comment', id: 'test-comment-id-3' }
+      const initialState = makeRelationships()
+      const expectedState = {
+        ...initialState,
+        comments: {
+          ...initialState.comments,
+          meta: {
+            changedData: [...initialState.comments.data, comment]
+          }
+        }
+      }
+      const payload = { type: 'post', relationship: 'comments', comments: comment }
+      const action = push(payload)
+      const state = relationshipsReducer(relationships)(initialState, action)
+      expect(state).toEqual(expectedState)
+    })
+
+    it('reverse', () => {
+      const initialState = makeRelationships()
+      const expectedState = {
+        ...initialState,
+        comments: {
+          ...initialState.comments,
+          meta: {
+            changedData: [...initialState.comments.data].reverse()
+          }
+        }
+      }
+      const payload = { type: 'post', relationship: 'comments' }
+      const action = reverse(payload)
+      const state = relationshipsReducer(relationships)(initialState, action)
+      expect(state).toEqual(expectedState)
+    })
+
+    it('slice', () => {
+      const begin = 0
+      const end = 1
+      const initialState = makeRelationships()
+      const expectedState = {
+        ...initialState,
+        comments: {
+          ...initialState.comments,
+          meta: {
+            changedData: [...initialState.comments.data].slice(begin, end)
+          }
+        }
+      }
+      const payload = { type: 'post', relationship: 'comments', begin, end }
+      const action = slice(payload)
+      const state = relationshipsReducer(relationships)(initialState, action)
+      expect(state).toEqual(expectedState)
+    })
+
+    it('sort', () => {
+      const sortFunc = (a, b) => {
+        if (a.id > b.id) {
+          return -1
+        }
+        if (a.id < b.id) {
+          return 1
+        }
+        return 0
+      }
+      const initialState = makeRelationships()
+      const expectedState = {
+        ...initialState,
+        comments: {
+          ...initialState.comments,
+          meta: {
+            changedData: [...initialState.comments.data].sort(sortFunc)
+          }
+        }
+      }
+      const payload = { type: 'post', relationship: 'comments', sort: sortFunc }
+      const action = sort(payload)
+      const state = relationshipsReducer(relationships)(initialState, action)
+      expect(state).toEqual(expectedState)
+    })
+
+    it('splice', () => {
+      const comment = { type: 'comment', id: 'test-comment-id-3' }
+      const start = 1
+      const deleteCount = 0
+      const initialState = makeRelationships()
+      const changedData = [...initialState.comments.data]
+      changedData.splice(start, deleteCount, comment)
+      const expectedState = {
+        ...initialState,
+        comments: {
+          ...initialState.comments,
+          meta: { changedData }
+        }
+      }
+      const payload = { type: 'post', relationship: 'comments', start, deleteCount, comments: comment }
+      const action = splice(payload)
+      const state = relationshipsReducer(relationships)(initialState, action)
+      expect(state).toEqual(expectedState)
+    })
+
+    it('unshift', () => {
+      const comment = { type: 'comment', id: 'test-comment-id-3' }
+      const initialState = makeRelationships()
+      const changedData = [...initialState.comments.data]
+      changedData.unshift(comment)
+      const expectedState = {
+        ...initialState,
+        comments: {
+          ...initialState.comments,
+          meta: { changedData }
+        }
+      }
+      const payload = { type: 'post', relationship: 'comments', comments: comment }
+      const action = unshift(payload)
+      const state = relationshipsReducer(relationships)(initialState, action)
+      expect(state).toEqual(expectedState)
+    })
   })
 })
