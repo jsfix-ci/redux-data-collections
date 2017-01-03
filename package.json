@@ -53,6 +53,7 @@
     "lodash.memoize": "^4.1.0",
     "lodash.snakecase": "^4.0.1",
     "lodash.upperfirst": "^4.2.0",
+    "object-resolve-path": "^1.1.1",
     "reduce-reducers": "^0.1.2",
     "redux": "^3.6.0",
     "redux-actions": "^1.2.0",

@@ -6,7 +6,7 @@ import {
   REDUX_DATA_ITEM_ATTRIBUTE_RESET,
   REDUX_DATA_ITEM_ATTRIBUTE_TOGGLE,
   REDUX_DATA_ITEM_ATTRIBUTE_DELETE
-} from 'constants/itemConstants'
+} from '../constants/itemConstants'
 
 const removeAttribute = (state, action) => {
   const { payload } = action

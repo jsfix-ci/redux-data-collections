@@ -5,7 +5,7 @@ import {
   // REDUX_DATA_ITEM_ATTRIBUTE_FORCE_SET,
   // REDUX_DATA_ITEM_ATTRIBUTE_FORCE_TOGGLE,
   // REDUX_DATA_ITEM_ATTRIBUTE_FORCE_DELETE
-} from 'constants/itemConstants'
+} from '../constants/itemConstants'
 
 // const mapActionToAttributeReducer = (state, action) => {
 //   const { payload } = action
