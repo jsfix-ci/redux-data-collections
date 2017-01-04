@@ -16,7 +16,8 @@ const postsReducer = dataReducer({
     name: AttributeTypes.string.isRequired
   },
   relationships: {
-    comments: RelationshipTypes.many
+    author: RelationshipTypes.one('person'),
+    comments: RelationshipTypes.many('comment')
   }
   // meta will be managed automatically.
 })

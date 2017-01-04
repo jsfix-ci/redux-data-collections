@@ -1,6 +1,6 @@
 {
   "name": "redux-data",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Redux actions, reducers and selectors for managing data in JSONAPI format.",
   "browser": "dist/redux.js",
   "main": "lib/index.js",
