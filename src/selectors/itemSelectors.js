@@ -1,9 +1,9 @@
 // TODO: move to a more generic location
-export const selectData = (state) => selectValueByKey(state)('data')
-export const selectMeta = (state) => selectValueByKey(state)('meta')
-export const selectId = (state) => selectValueByKey(state)('id')
-export const selectType = (state) => selectValueByKey(state)('type')
-export const selectValueByKey = (state) => (key) => state !== undefined ? state[key] : undefined
+export const selectData = (item) => selectValueByKey(item)('data')
+export const selectMeta = (item) => selectValueByKey(item)('meta')
+export const selectId = (item) => selectValueByKey(item)('id')
+export const selectType = (item) => selectValueByKey(item)('type')
+export const selectValueByKey = (item) => (key) => item !== undefined ? item[key] : undefined
 
 // state is a list with data and meta
 export const selectItemById = (state) => (type, id) => {

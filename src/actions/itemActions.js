@@ -1,52 +1,55 @@
 import { createAction } from 'redux-actions'
 import {
-  REDUX_DATA_ITEM_CREATE_NEW,
-  REDUX_DATA_ITEM_SAVE,
-  REDUX_DATA_ITEM_RELOAD,
-  REDUX_DATA_ITEM_DELETE,
-  REDUX_DATA_ITEM_DESTROY,
+  ITEM_CREATE_NEW,
+  ITEM_ADD,
+  ITEM_SAVE,
+  ITEM_RELOAD,
+  ITEM_DELETE,
+  ITEM_DESTROY,
 
-  REDUX_DATA_ITEM_ATTRIBUTES_MAP,
-  REDUX_DATA_ITEM_ATTRIBUTES_ROLLBACK,
-  REDUX_DATA_ITEM_ATTRIBUTES_SET,
-  REDUX_DATA_ITEM_ATTRIBUTE_SET,
-  REDUX_DATA_ITEM_ATTRIBUTE_RESET,
-  REDUX_DATA_ITEM_ATTRIBUTE_TOGGLE,
-  REDUX_DATA_ITEM_ATTRIBUTE_DELETE
+  ITEM_ATTRIBUTES_MAP,
+  ITEM_ATTRIBUTES_ROLLBACK,
+  ITEM_ATTRIBUTES_SET,
+  ITEM_ATTRIBUTE_SET,
+  ITEM_ATTRIBUTE_RESET,
+  ITEM_ATTRIBUTE_TOGGLE,
+  ITEM_ATTRIBUTE_DELETE
  } from '../constants/itemConstants'
 
 // payload: { type, [type] }
-export const createNew = createAction(REDUX_DATA_ITEM_CREATE_NEW)
+export const createNew = createAction(ITEM_CREATE_NEW)
+
+export const addItem = createAction(ITEM_ADD)
 
 // saves to server
 // payload: { type, id }
-export const save = createAction(REDUX_DATA_ITEM_SAVE)
+export const save = createAction(ITEM_SAVE)
 
 // reloads from server
 // payload: { type, id }
-export const reload = createAction(REDUX_DATA_ITEM_RELOAD)
+export const reload = createAction(ITEM_RELOAD)
 
 // deletes from the server
 // payload: { type, id }
-export const deleteItem = createAction(REDUX_DATA_ITEM_DELETE)
+export const deleteItem = createAction(ITEM_DELETE)
 
 // deletes from local array
 // payload: { type, id }
-export const destroyItem = createAction(REDUX_DATA_ITEM_DESTROY)
+export const destroyItem = createAction(ITEM_DESTROY)
 
-export const mapAttributes = createAction(REDUX_DATA_ITEM_ATTRIBUTES_MAP)
-export const rollbackAttributes = createAction(REDUX_DATA_ITEM_ATTRIBUTES_ROLLBACK)
+export const mapAttributes = createAction(ITEM_ATTRIBUTES_MAP)
+export const rollbackAttributes = createAction(ITEM_ATTRIBUTES_ROLLBACK)
 
-export const setAttributes = createAction(REDUX_DATA_ITEM_ATTRIBUTES_SET)
+export const setAttributes = createAction(ITEM_ATTRIBUTES_SET)
 
 // payload: { type, id, attribute, value }
-export const setAttribute = createAction(REDUX_DATA_ITEM_ATTRIBUTE_SET)
+export const setAttribute = createAction(ITEM_ATTRIBUTE_SET)
 
 // payload: { type, id, attribute }
-export const resetAttribute = createAction(REDUX_DATA_ITEM_ATTRIBUTE_RESET)
+export const resetAttribute = createAction(ITEM_ATTRIBUTE_RESET)
 
 // payload: { type, id, attribute }
-export const toggleAttribute = createAction(REDUX_DATA_ITEM_ATTRIBUTE_TOGGLE)
+export const toggleAttribute = createAction(ITEM_ATTRIBUTE_TOGGLE)
 
 // payload: { type, id, attribute }
-export const deleteAttribute = createAction(REDUX_DATA_ITEM_ATTRIBUTE_DELETE)
+export const deleteAttribute = createAction(ITEM_ATTRIBUTE_DELETE)

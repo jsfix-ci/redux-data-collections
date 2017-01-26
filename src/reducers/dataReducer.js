@@ -3,18 +3,19 @@ import reduceReducers from 'reduce-reducers'
 import { pluralize } from 'inflection'
 import itemReducer from './itemReducer'
 import {
-  REDUX_DATA_ITEM_CREATE_NEW
+  ITEM_CREATE_NEW,
+  ITEM_ADD
 } from '../constants/itemConstants'
 import {
-  REDUX_DATA_LIST_CONCAT,
-  REDUX_DATA_LIST_FILTER,
-  REDUX_DATA_LIST_MAP,
-  REDUX_DATA_LIST_PUSH,
-  REDUX_DATA_LIST_REVERSE,
-  REDUX_DATA_LIST_SLICE,
-  REDUX_DATA_LIST_SORT,
-  REDUX_DATA_LIST_SPLICE,
-  REDUX_DATA_LIST_UNSHIFT
+  LIST_CONCAT,
+  LIST_FILTER,
+  LIST_MAP,
+  LIST_PUSH,
+  LIST_REVERSE,
+  LIST_SLICE,
+  LIST_SORT,
+  LIST_SPLICE,
+  LIST_UNSHIFT
 } from '../constants/listConstants'
 
 const mapActionToItemReducer = (type, id) => (state, action) => {
@@ -26,12 +27,19 @@ const mapActionToItemReducer = (type, id) => (state, action) => {
 
 // TODO: should these alter the real array?
 const listReducer = handleActions({
-  [REDUX_DATA_ITEM_CREATE_NEW]: (state, action) => {
-    const { payload } = action || {}
-    const { type } = payload
-    return [...state, itemReducer(payload[type], action)]
+  [ITEM_CREATE_NEW]: (state, action) => {
+    // const { payload } = action || {}
+    // const { type } = payload
+    return [...state, itemReducer(undefined, action)]
   },
-  [REDUX_DATA_LIST_CONCAT]: (state, action) => {
+  [ITEM_ADD]: (state, action) => {
+    const { payload } = action || {}
+    const { type, id } = payload
+    const item = state.find(i => i.type === type && i.id === id)
+    if (item) { return state }
+    return [...state, itemReducer(item, action)]
+  },
+  [LIST_CONCAT]: (state, action) => {
     const { payload } = action || {}
     const { type } = payload
     // TODO: stop using pluralize
@@ -43,9 +51,9 @@ const listReducer = handleActions({
     }
     return state
   },
-  [REDUX_DATA_LIST_FILTER]: (state, action) => state.filter(action.payload.filter),
-  [REDUX_DATA_LIST_MAP]: (state, action) => state.map(action.payload.map),
-  [REDUX_DATA_LIST_PUSH]: (state, action) => {
+  [LIST_FILTER]: (state, action) => state.filter(action.payload.filter),
+  [LIST_MAP]: (state, action) => state.map(action.payload.map),
+  [LIST_PUSH]: (state, action) => {
     const { payload } = action || {}
     const { type } = payload
     const types = pluralize(type)
@@ -57,10 +65,10 @@ const listReducer = handleActions({
     } else { return state }
     return newState
   },
-  [REDUX_DATA_LIST_REVERSE]: (state, action) => [...state].reverse(),
-  [REDUX_DATA_LIST_SLICE]: (state, action) => state.slice(action.payload.begin, action.payload.end),
-  [REDUX_DATA_LIST_SORT]: (state, action) => [...state].sort(action.payload.sort),
-  [REDUX_DATA_LIST_SPLICE]: (state, action) => {
+  [LIST_REVERSE]: (state, action) => [...state].reverse(),
+  [LIST_SLICE]: (state, action) => state.slice(action.payload.begin, action.payload.end),
+  [LIST_SORT]: (state, action) => [...state].sort(action.payload.sort),
+  [LIST_SPLICE]: (state, action) => {
     const { payload } = action || {}
     const { start, deleteCount, type } = payload
     const types = pluralize(type)
@@ -75,7 +83,7 @@ const listReducer = handleActions({
     } else { return state }
     return newState
   },
-  [REDUX_DATA_LIST_UNSHIFT]: (state, action) => {
+  [LIST_UNSHIFT]: (state, action) => {
     const { payload } = action || {}
     const { type } = payload
     const types = pluralize(type)
@@ -93,6 +101,7 @@ const listReducer = handleActions({
 
 const dataReducer = (type, relationships = []) => (state = [], action) => {
   const { payload } = action || {}
+  console.log(action.type, payload && payload.type === type, payload && payload.type, type)
   if (!payload || payload.type !== type) { return state }
 
   return reduceReducers(

@@ -1,11 +1,11 @@
 import { handleActions } from 'redux-actions'
 import {
-  REDUX_DATA_ITEM_SAVE,
-  REDUX_DATA_ITEM_ATTRIBUTES_SET,
-  REDUX_DATA_ITEM_ATTRIBUTE_SET,
-  REDUX_DATA_ITEM_ATTRIBUTE_RESET,
-  REDUX_DATA_ITEM_ATTRIBUTE_TOGGLE,
-  REDUX_DATA_ITEM_ATTRIBUTE_DELETE
+  ITEM_SAVE,
+  ITEM_ATTRIBUTES_SET,
+  ITEM_ATTRIBUTE_SET,
+  ITEM_ATTRIBUTE_RESET,
+  ITEM_ATTRIBUTE_TOGGLE,
+  ITEM_ATTRIBUTE_DELETE
 } from '../constants/itemConstants'
 
 const removeAttribute = (state, action) => {
@@ -17,7 +17,7 @@ const removeAttribute = (state, action) => {
 }
 
 const changedAttributesReducer = handleActions({
-  [REDUX_DATA_ITEM_ATTRIBUTE_SET]: (state, action) => {
+  [ITEM_ATTRIBUTE_SET]: (state, action) => {
     const { payload } = action
     const { attribute, value } = payload
     return {
@@ -25,8 +25,8 @@ const changedAttributesReducer = handleActions({
       [attribute]: value
     }
   },
-  [REDUX_DATA_ITEM_ATTRIBUTE_RESET]: removeAttribute,
-  [REDUX_DATA_ITEM_ATTRIBUTE_TOGGLE]: (state, action) => {
+  [ITEM_ATTRIBUTE_RESET]: removeAttribute,
+  [ITEM_ATTRIBUTE_TOGGLE]: (state, action) => {
     const { payload, meta } = action
     const { value } = meta || {}
     const { attribute } = payload
@@ -41,16 +41,16 @@ const changedAttributesReducer = handleActions({
       [attribute]: newValue
     }
   },
-  [REDUX_DATA_ITEM_ATTRIBUTE_DELETE]: removeAttribute
+  [ITEM_ATTRIBUTE_DELETE]: removeAttribute
 }, '')
 
 const deletedAttributesReducer = handleActions({
-  [REDUX_DATA_ITEM_ATTRIBUTE_RESET]: (state, action) => {
+  [ITEM_ATTRIBUTE_RESET]: (state, action) => {
     const { payload } = action
     const { attribute } = payload
     return state.filter(value => !attribute)
   },
-  [REDUX_DATA_ITEM_ATTRIBUTE_DELETE]: (state, action) => {
+  [ITEM_ATTRIBUTE_DELETE]: (state, action) => {
     const { payload } = action
     const { attribute } = payload
     return [ ...state, attribute ]
@@ -58,13 +58,13 @@ const deletedAttributesReducer = handleActions({
 }, [])
 
 const itemMetaReducer = handleActions({
-  [REDUX_DATA_ITEM_SAVE]: (state, action) => {
+  [ITEM_SAVE]: (state, action) => {
     const newState = { ...state, isSaved: true }
     delete newState.changedAttributes
     delete newState.deletedAttributes
     return newState
   },
-  [REDUX_DATA_ITEM_ATTRIBUTES_SET]: (state, action) => {
+  [ITEM_ATTRIBUTES_SET]: (state, action) => {
     const { payload } = action
     const { attributes } = payload
     const { changedAttributes } = state
@@ -78,7 +78,7 @@ const itemMetaReducer = handleActions({
       isSaved: false
     }
   },
-  [REDUX_DATA_ITEM_ATTRIBUTE_SET]: (state, action) => {
+  [ITEM_ATTRIBUTE_SET]: (state, action) => {
     const { meta } = state
     const { changedAttributes } = meta || {}
 
@@ -88,7 +88,7 @@ const itemMetaReducer = handleActions({
       isSaved: false
     }
   },
-  [REDUX_DATA_ITEM_ATTRIBUTE_RESET]: (state, action) => {
+  [ITEM_ATTRIBUTE_RESET]: (state, action) => {
     const { changedAttributes, deletedAttributes } = state || {}
     const newChangedAttributes = changedAttributesReducer(changedAttributes, action)
     const newDeletedAttributes = deletedAttributesReducer(deletedAttributes, action)
@@ -109,7 +109,7 @@ const itemMetaReducer = handleActions({
     newState.isSaved = !hasChangedAttributes && !hasDeletedAttributes
     return newState
   },
-  [REDUX_DATA_ITEM_ATTRIBUTE_TOGGLE]: (state, action) => {
+  [ITEM_ATTRIBUTE_TOGGLE]: (state, action) => {
     const { changedAttributes, deletedAttributes } = state || {}
     const newState = { ...state }
 
@@ -126,7 +126,7 @@ const itemMetaReducer = handleActions({
 
     return newState
   },
-  [REDUX_DATA_ITEM_ATTRIBUTE_DELETE]: (state, action) => {
+  [ITEM_ATTRIBUTE_DELETE]: (state, action) => {
     const { changedAttributes, deletedAttributes } = state
     const newState = {
       ...state,

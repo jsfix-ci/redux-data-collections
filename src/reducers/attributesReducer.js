@@ -1,10 +1,10 @@
 import { handleActions } from 'redux-actions'
 import {
-  REDUX_DATA_ITEM_ATTRIBUTES_MAP
+  ITEM_ATTRIBUTES_MAP
   // TODO:
-  // REDUX_DATA_ITEM_ATTRIBUTE_FORCE_SET,
-  // REDUX_DATA_ITEM_ATTRIBUTE_FORCE_TOGGLE,
-  // REDUX_DATA_ITEM_ATTRIBUTE_FORCE_DELETE
+  // ITEM_ATTRIBUTE_FORCE_SET,
+  // ITEM_ATTRIBUTE_FORCE_TOGGLE,
+  // ITEM_ATTRIBUTE_FORCE_DELETE
 } from '../constants/itemConstants'
 
 // const mapActionToAttributeReducer = (state, action) => {
@@ -22,7 +22,7 @@ import {
 
 const attributesReducer = handleActions({
   // TODO: this seems useless
-  [REDUX_DATA_ITEM_ATTRIBUTES_MAP]: (state, action) => {
+  [ITEM_ATTRIBUTES_MAP]: (state, action) => {
     const { payload } = action
     const { map } = payload
     const keys = Object.keys(state)
