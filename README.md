@@ -5,12 +5,6 @@ Redux actions, reducers and selectors for managing data in JSONAPI format.
 
 ## Installation
 
-### NPM
-```
-npm install --save redux-data
-```
-
-### Yarn
 ```
 yarn add redux-data
 ```
@@ -18,23 +12,49 @@ yarn add redux-data
 ## Usage
 These examples presume you're using React Redux Starter Kit (because I do). There's nothing particularly special about one react-redux kit versus another. You should be able to adapt these examples to your needs.
 
-### Create reducers for your collections
-Redux-data exports the `collectionReducer` by default. The default reducer is actually a "reducer creator" -- it's a curried function. You need to pass it some configuration by default so that it knows what you plan to store in the collection. This configuration is also important fo
+Redux-data exports `createCollectionReducer` by default. A collection reducer will only handle actions with a `meta.type` that matches the collection type. For instance, if you create a reducer like `createCollectionReducer('cars')`, the created reducer will only respond to actions where the `action.meta.type === 'cars'`.
+
+**Simply add your collections to your root reducer in `src/store/reducers.js`**
 
 ```js
 import { combineReducers } from 'redux'
-import collectionReducer from 'redux-data'
+import createCollectionReducer from 'redux-data'
 
-export const makeRootReducer = (asyncReducers) => {
+// in a naive world we'd just create the reducers and move on
+export const createRootReducer = (asyncReducers) => {
   return combineReducers({
-    articles: collectionReducer({ type: 'articles' }),
-    comments: collectionReducer({ type: 'comments' }),
-    people: collectionReducer({ type: 'people' }),
+    articles: createCollectionReducer('articles'),
+    comments: createCollectionReducer('comments'),
+    people: createCollectionReducer('people'),
     ...asyncReducers
   })
 }
 
 // ...
+```
+
+### Customizing the default reducer
+The reducer returned from `redux-data` is designed to handle specific actions. If we need custom actions we can join the collectionReducer form `redux-data` with our custom reducer using `reduceReducers`.
+
+```js
+import makeCollectionReducer, { reduceReducers } from 'redux-data'
+import { handleActions } from 'redux-actions'
+import { CUSTOM_ACTION_TYPE } from './constants'
+
+// create a redux-data reducer
+const collectionReducer = makeCollectionReducer('media')
+
+// create your own reducer
+const mediaReducer = handleActions({
+  [CUSTOM_ACTION_TYPE] state => state
+}, {})
+
+// join the two reducers together
+// the collection reducer will run first, it will capture only redux-data actions
+// the media reducer runs second and will get the state after redux-data has altered it
+const reducer = reduceReducers(collectionReducer, mediaReducer)
+
+export default reducer
 ```
 
 ### Send actions to your reducers
@@ -77,8 +97,8 @@ import { setAttribute } from 'redux-data/lib/actions/itemActions'
 
 const mapStateToProps = (state, ownProps) => {
   return {
-    attributes: selectItemAttributes(state)('post', 'post-id-1'),
-    name: selectItemAttributeByName(state)('post', 'post-id-1', 'name'),
+    attributes: selectItemAttributes(state)('post', 'post-id-1'), // <-- all attributes
+    name: selectItemAttributeByName(state)('post', 'post-id-1', 'name'), // <-- just the name
   }
 }
 
@@ -100,7 +120,3 @@ const EditEntityContainer = connect(mapStateToProps, mapDispatchToProps)(EditEnt
 export default EditEntityContainer
 
 ```
-
-### Examples
-
-## Docs

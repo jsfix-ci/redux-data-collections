@@ -1,5 +1,6 @@
-// export * from './itemActions'
-// export * from './listActions'
+import { createAction as defaultCreateAction } from 'redux-actions'
 
-// TODO: maybe have a func to force type to be set on action payload
-export const forceActionType = (type, action) => (payload) => action({ type, ...payload })
+export const payloadCreator = ({ data, options } = {}) => ({ data, options })
+export const metaCreator = ({ type, id } = {}) => ({ type, id })
+
+export const createAction = (type) => defaultCreateAction(type, payloadCreator, metaCreator)

@@ -1,4 +1,4 @@
-import { createAction } from 'redux-actions'
+import { createAction } from './'
 import {
   ITEM_CREATE_NEW,
   ITEM_ADD,
@@ -16,7 +16,7 @@ import {
   ITEM_ATTRIBUTE_DELETE
  } from '../constants/itemConstants'
 
-// payload: { type, [type] }
+// payload: { type, data }
 export const createNew = createAction(ITEM_CREATE_NEW)
 
 export const addItem = createAction(ITEM_ADD)
