@@ -24,9 +24,9 @@ const attributesReducer = handleActions({
   // TODO: this seems useless
   [ITEM_ATTRIBUTES_MAP]: (state, action) => {
     const { payload } = action
-    const { map } = payload
+    const { func } = payload
     const keys = Object.keys(state)
-    return keys.map(key => map(state[key], key, state)).reduce((attributes, value, i) => {
+    return keys.map(key => func(state[key], key, state)).reduce((attributes, value, i) => {
       attributes[keys[i]] = value
       return attributes
     }, {})

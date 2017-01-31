@@ -10,35 +10,35 @@ import {
 
 const removeAttribute = (state, action) => {
   const { payload } = action
-  const { attribute } = payload
+  const { key } = payload
   const newState = { ...state }
-  delete newState[attribute]
+  delete newState[key]
   return newState
 }
 
 const changedAttributesReducer = handleActions({
   [ITEM_ATTRIBUTE_SET]: (state, action) => {
     const { payload } = action
-    const { attribute, value } = payload
+    const { key, value } = payload
     return {
       ...state,
-      [attribute]: value
+      [key]: value
     }
   },
   [ITEM_ATTRIBUTE_RESET]: removeAttribute,
   [ITEM_ATTRIBUTE_TOGGLE]: (state, action) => {
     const { payload, meta } = action
     const { value } = meta || {}
-    const { attribute } = payload
-    const newValue = state[attribute] === undefined ? !value : !state[attribute]
-    if (newValue && value) {
+    const { key } = payload
+    const newValue = state[key] === undefined ? !value : !state[key]
+    if (newValue === value) {
       const newState = { ...state }
-      delete newState[attribute]
+      delete newState[key]
       return newState
     }
     return {
       ...state,
-      [attribute]: newValue
+      [key]: newValue
     }
   },
   [ITEM_ATTRIBUTE_DELETE]: removeAttribute
@@ -47,13 +47,13 @@ const changedAttributesReducer = handleActions({
 const deletedAttributesReducer = handleActions({
   [ITEM_ATTRIBUTE_RESET]: (state, action) => {
     const { payload } = action
-    const { attribute } = payload
-    return state.filter(value => !attribute)
+    const { key } = payload
+    return state.filter(value => !key)
   },
   [ITEM_ATTRIBUTE_DELETE]: (state, action) => {
     const { payload } = action
-    const { attribute } = payload
-    return [ ...state, attribute ]
+    const { key } = payload
+    return [ ...state, key ]
   }
 }, [])
 
@@ -66,14 +66,14 @@ const itemMetaReducer = handleActions({
   },
   [ITEM_ATTRIBUTES_SET]: (state, action) => {
     const { payload } = action
-    const { attributes } = payload
+    const { data } = payload
     const { changedAttributes } = state
 
     return {
       ...state,
       changedAttributes: {
         ...changedAttributes,
-        ...attributes
+        ...data
       },
       isSaved: false
     }

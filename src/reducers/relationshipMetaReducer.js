@@ -31,7 +31,8 @@ const deleteKey = (state = {}, key) => {
 
 const relationshipMetaReducer = (config) => {
   const { isOne } = config
-  const reducers = reduceReducers(
+  return reduceReducers(
+    // TODO: this throws for unknown keys
     combineReducers({
       changedData: changedDataReducer(config),
       isDeleted: (state = false) => state
@@ -55,19 +56,17 @@ const relationshipMetaReducer = (config) => {
     (state, action) => {
       // cleanup empty attributes, etc
       const { changedData, isDeleted } = state
-      let newState = { ...state }
+      let newState
       if (changedData === null || Array.isArray(state.changedData) && !state.changedData.length) {
+        newState = { ...state }
         newState = deleteKey(newState, 'changedData')
       }
       if (isDeleted === false) {
+        newState = newState || { ...state }
         newState = deleteKey(newState, 'isDeleted')
       }
-      return newState
+      return newState || state
     }
   )
-  return (state, action) => {
-    // TODO: bail on empty actions, etc.
-    return reducers(state, action)
-  }
 }
 export default relationshipMetaReducer

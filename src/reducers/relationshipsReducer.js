@@ -3,17 +3,15 @@ import relationshipDataReducer from './relationshipDataReducer'
 import relationshipMetaReducer from './relationshipMetaReducer'
 
 const relationshipReducer = (config) => {
-  const { key } = config
   const reducer = combineReducers({
     data: relationshipDataReducer(config),
     meta: relationshipMetaReducer(config)
   })
+
   return (state = {}, action) => {
-    const { payload } = action
-    if (!payload) { return state }
-    const { relationship } = payload
-    if (!relationship) { return state }
-    if (key !== relationship) { return state }
+    if (!action.meta) { return state }
+
+    // alter the action before passing to reducer
     const newAction = {
       ...action,
       meta: {
@@ -26,12 +24,19 @@ const relationshipReducer = (config) => {
 }
 
 // NOTE: relationships = [{ key = 'comments', isOne = false, accepts = ['comment'] }]
-const relationshipsReducer = (relationships = []) => (state = {}, action) => {
-  if (!action.payload) { return state }
+const relationshipsReducer = (options = {}) => (state = {}, action) => {
+  const { relationships } = options
+  if (!relationships) { return state }
+  const keys = Object.keys(relationships)
+  if (!keys.length) { return state }
+
   const reducers = {}
-  relationships.reduce((_, config) => {
-    reducers[config.key] = relationshipReducer(config)
+
+  keys.reduce((_, key) => {
+    const config = relationships[key]
+    reducers[key] = relationshipReducer(config)
   }, reducers)
-  return relationships.length ? combineReducers(reducers)(state, action) : state
+
+  return combineReducers(reducers)(state, action)
 }
 export default relationshipsReducer

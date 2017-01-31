@@ -1,4 +1,5 @@
-import { createAction } from 'redux-actions'
+import { createStandardAction } from './'
+
 import {
   LIST_CONCAT,
   LIST_FILTER,
@@ -18,29 +19,29 @@ import {
 // like: push({ type: 'post', post: { type: 'post', id: 'post-id-1' } })
 // like: push({ type: 'post', posts: [{ type: 'post', id: 'post-id-1' }] })
 
-// payload: { type, [types] } -> { type: 'post', posts: [] }
-export const concat = createAction(LIST_CONCAT)
+// payload: { type, data }
+export const concat = createStandardAction(LIST_CONCAT)
 
 // payload: { type, filter: func }
-export const filter = createAction(LIST_FILTER)
+export const filter = createStandardAction(LIST_FILTER)
 
 // payload: { type, map: func }
-export const map = createAction(LIST_MAP)
+export const map = createStandardAction(LIST_MAP)
 
-// payload: { type, [type] || [types] }
-export const push = createAction(LIST_PUSH)
+// payload: { type, data }
+export const push = createStandardAction(LIST_PUSH)
 
 // payload: { type }
-export const reverse = createAction(LIST_REVERSE)
+export const reverse = createStandardAction(LIST_REVERSE)
 
-// payload: { type, begin: index, end: index }
-export const slice = createAction(LIST_SLICE)
+// payload: { type, options: { begin: index, end: index } }
+export const slice = createStandardAction(LIST_SLICE)
 
 // payload: { type, sort: func }
-export const sort = createAction(LIST_SORT)
+export const sort = createStandardAction(LIST_SORT)
 
-// payload: { type, begin: index, end: index, [type] || [types] }
-export const splice = createAction(LIST_SPLICE)
+// payload: { type, begin: index, end: index, data }
+export const splice = createStandardAction(LIST_SPLICE)
 
-// payload: { type, [type] || [types] }
-export const unshift = createAction(LIST_UNSHIFT)
+// payload: { type, data }
+export const unshift = createStandardAction(LIST_UNSHIFT)

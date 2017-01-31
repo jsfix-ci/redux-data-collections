@@ -1,4 +1,5 @@
-import { createAction } from './'
+import { createStandardAction } from './'
+
 import {
   ITEM_CREATE_NEW,
   ITEM_ADD,
@@ -17,39 +18,39 @@ import {
  } from '../constants/itemConstants'
 
 // payload: { type, data }
-export const createNew = createAction(ITEM_CREATE_NEW)
+export const createNew = createStandardAction(ITEM_CREATE_NEW)
 
-export const addItem = createAction(ITEM_ADD)
+export const addItem = createStandardAction(ITEM_ADD)
 
 // saves to server
 // payload: { type, id }
-export const save = createAction(ITEM_SAVE)
+export const save = createStandardAction(ITEM_SAVE)
 
 // reloads from server
 // payload: { type, id }
-export const reload = createAction(ITEM_RELOAD)
+export const reload = createStandardAction(ITEM_RELOAD)
 
 // deletes from the server
 // payload: { type, id }
-export const deleteItem = createAction(ITEM_DELETE)
+export const deleteItem = createStandardAction(ITEM_DELETE)
 
 // deletes from local array
 // payload: { type, id }
-export const destroyItem = createAction(ITEM_DESTROY)
+export const destroyItem = createStandardAction(ITEM_DESTROY)
 
-export const mapAttributes = createAction(ITEM_ATTRIBUTES_MAP)
-export const rollbackAttributes = createAction(ITEM_ATTRIBUTES_ROLLBACK)
+export const mapAttributes = createStandardAction(ITEM_ATTRIBUTES_MAP)
+export const rollbackAttributes = createStandardAction(ITEM_ATTRIBUTES_ROLLBACK)
 
-export const setAttributes = createAction(ITEM_ATTRIBUTES_SET)
+export const setAttributes = createStandardAction(ITEM_ATTRIBUTES_SET)
 
 // payload: { type, id, attribute, value }
-export const setAttribute = createAction(ITEM_ATTRIBUTE_SET)
+export const setAttribute = createStandardAction(ITEM_ATTRIBUTE_SET)
 
 // payload: { type, id, attribute }
-export const resetAttribute = createAction(ITEM_ATTRIBUTE_RESET)
+export const resetAttribute = createStandardAction(ITEM_ATTRIBUTE_RESET)
 
 // payload: { type, id, attribute }
-export const toggleAttribute = createAction(ITEM_ATTRIBUTE_TOGGLE)
+export const toggleAttribute = createStandardAction(ITEM_ATTRIBUTE_TOGGLE)
 
 // payload: { type, id, attribute }
-export const deleteAttribute = createAction(ITEM_ATTRIBUTE_DELETE)
+export const deleteAttribute = createStandardAction(ITEM_ATTRIBUTE_DELETE)

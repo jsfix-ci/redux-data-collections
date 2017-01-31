@@ -18,13 +18,15 @@ import {
 const makeRelationships = (relationship, meta) => {
   const state = {
     author: {
-      data: { type: 'person', id: 'test-person-id-1' }
+      data: { type: 'person', id: 'test-person-id-1' },
+      meta: {}
     },
     comments: {
       data: [
         { type: 'comment', id: 'test-comment-id-1' },
         { type: 'comment', id: 'test-comment-id-2' }
-      ]
+      ],
+      meta: {}
     }
   }
   if (relationship && state[relationship]) {
@@ -32,10 +34,12 @@ const makeRelationships = (relationship, meta) => {
   }
   return state
 }
-const relationships = [
-  { key: 'author', isOne: true, accepts: ['person'] },
-  { key: 'comments', isOne: false, accepts: ['comment'] }
-]
+const options = {
+  relationships: {
+    author: { isOne: true, accepts: ['person'] },
+    comments: { isOne: false, accepts: ['comment'] }
+  }
+}
 
 describe('Reducers', () => {
   describe('relationshipsReducer', () => {
@@ -43,36 +47,36 @@ describe('Reducers', () => {
       const initialState = makeRelationships()
       const expectedState = { ...initialState }
       const action = {}
-      const state = relationshipsReducer(relationships)(initialState, action)
+      const state = relationshipsReducer(options)(initialState, action)
       expect(state).toEqual(expectedState)
     })
 
     it('returns initial state for author action', () => {
       const initialState = makeRelationships()
       const expectedState = { ...initialState }
-      const action = { relationship: 'author' }
-      const state = relationshipsReducer(relationships)(initialState, action)
+      const action = { key: 'author' }
+      const state = relationshipsReducer(options)(initialState, action)
       expect(state).toEqual(expectedState)
     })
 
     it('returns initial state for comment action', () => {
       const initialState = makeRelationships()
       const expectedState = { ...initialState }
-      const action = { relationship: 'comment' }
-      const state = relationshipsReducer(relationships)(initialState, action)
+      const action = { key: 'comment' }
+      const state = relationshipsReducer(options)(initialState, action)
       expect(state).toEqual(expectedState)
     })
 
     it('returns initial state for foo action', () => {
       const initialState = makeRelationships()
       const expectedState = {...initialState}
-      const action = { relationship: 'foo' }
-      const state = relationshipsReducer(relationships)(initialState, action)
+      const action = { key: 'foo' }
+      const state = relationshipsReducer(options)(initialState, action)
       expect(state).toEqual(expectedState)
     })
 
     it('reset with one changedData', () => {
-      const payload = { type: 'post', relationship: 'author' }
+      const payload = { type: 'post', key: 'author' }
       const initialState = makeRelationships('author', {
         changedData: { type: 'person', id: 'test-person-id-2' }
       })
@@ -84,12 +88,12 @@ describe('Reducers', () => {
         }
       }
       const action = reset(payload)
-      const state = relationshipsReducer(relationships)(initialState, action)
+      const state = relationshipsReducer(options)(initialState, action)
       expect(state).toEqual(expectedState)
     })
 
     it('reset with one isDeleted', () => {
-      const payload = { type: 'post', relationship: 'author' }
+      const payload = { type: 'post', key: 'author' }
       const initialState = makeRelationships('author', { isDeleted: true })
       const expectedState = {
         ...initialState,
@@ -99,12 +103,12 @@ describe('Reducers', () => {
         }
       }
       const action = reset(payload)
-      const state = relationshipsReducer(relationships)(initialState, action)
+      const state = relationshipsReducer(options)(initialState, action)
       expect(state).toEqual(expectedState)
     })
 
     it('reset with many changedData', () => {
-      const payload = { type: 'post', relationship: 'comments' }
+      const payload = { type: 'post', key: 'comments' }
       const initialState = makeRelationships('comments', {
         changedData: [
           { type: 'comment', id: 'test-comment-id-1' },
@@ -120,12 +124,12 @@ describe('Reducers', () => {
         }
       }
       const action = reset(payload)
-      const state = relationshipsReducer(relationships)(initialState, action)
+      const state = relationshipsReducer(options)(initialState, action)
       expect(state).toEqual(expectedState)
     })
 
     it('reset with many isDeleted', () => {
-      const payload = { type: 'post', relationship: 'comments' }
+      const payload = { type: 'post', key: 'comments' }
       const initialState = makeRelationships('comments', {
         isDeleted: true
       })
@@ -137,36 +141,36 @@ describe('Reducers', () => {
         }
       }
       const action = reset(payload)
-      const state = relationshipsReducer(relationships)(initialState, action)
+      const state = relationshipsReducer(options)(initialState, action)
       expect(state).toEqual(expectedState)
     })
 
     it('set author', () => {
-      const payload = { type: 'post', relationship: 'author', author: { type: 'person', id: 'test-person-id-2' } }
+      const payload = { type: 'post', key: 'author', data: { type: 'person', id: 'test-person-id-2' } }
       const initialState = makeRelationships()
       const expectedState = {
         ...initialState,
-        author: { ...initialState.author, meta: { changedData: payload.author } }
+        author: { ...initialState.author, meta: { changedData: payload.data } }
       }
       const action = set(payload)
-      const state = relationshipsReducer(relationships)(initialState, action)
+      const state = relationshipsReducer(options)(initialState, action)
       expect(state).toEqual(expectedState)
     })
 
     it('deleteOne author', () => {
-      const payload = { type: 'post', relationship: 'author' }
+      const payload = { type: 'post', key: 'author' }
       const initialState = makeRelationships()
       const expectedState = {
         ...initialState,
         author: { ...initialState.author, meta: { isDeleted: true } }
       }
       const action = deleteOne(payload)
-      const state = relationshipsReducer(relationships)(initialState, action)
+      const state = relationshipsReducer(options)(initialState, action)
       expect(state).toEqual(expectedState)
     })
 
     it('deleteOne author with changedData', () => {
-      const payload = { type: 'post', relationship: 'author' }
+      const payload = { type: 'post', key: 'author' }
       const initialState = makeRelationships('author', {
         changedData: { type: 'person', id: 'test-person-id-2' }
       })
@@ -175,12 +179,12 @@ describe('Reducers', () => {
         author: { ...initialState.author, meta: { isDeleted: true } }
       }
       const action = deleteOne(payload)
-      const state = relationshipsReducer(relationships)(initialState, action)
+      const state = relationshipsReducer(options)(initialState, action)
       expect(state).toEqual(expectedState)
     })
 
     it('deleteRelationship', () => {
-      const payload = { type: 'post', relationship: 'comments' }
+      const payload = { type: 'post', key: 'comments' }
       const initialState = makeRelationships()
       const expectedState = {
         ...initialState,
@@ -190,12 +194,12 @@ describe('Reducers', () => {
         }
       }
       const action = deleteRelationship(payload)
-      const state = relationshipsReducer(relationships)(initialState, action)
+      const state = relationshipsReducer(options)(initialState, action)
       expect(state).toEqual(expectedState)
     })
 
     it('deleteRelationship with changedData', () => {
-      const payload = { type: 'post', relationship: 'comments' }
+      const payload = { type: 'post', key: 'comments' }
       const initialState = makeRelationships('comments', {
         changedData: [
           { type: 'comment', id: 'test-comment-id-1' },
@@ -211,15 +215,15 @@ describe('Reducers', () => {
         }
       }
       const action = deleteRelationship(payload)
-      const state = relationshipsReducer(relationships)(initialState, action)
+      const state = relationshipsReducer(options)(initialState, action)
       expect(state).toEqual(expectedState)
     })
 
     it('concat array of items', () => {
       const payload = {
         type: 'post',
-        relationship: 'comments',
-        comments: [{ type: 'comment', id: 'test-comment-id-3' }]
+        key: 'comments',
+        data: [{ type: 'comment', id: 'test-comment-id-3' }]
       }
       const initialState = makeRelationships()
       const expectedState = {
@@ -229,21 +233,21 @@ describe('Reducers', () => {
           meta: {
             changedData: [
               ...initialState.comments.data,
-              ...payload.comments
+              ...payload.data
             ]
           }
         }
       }
       const action = concat(payload)
-      const state = relationshipsReducer(relationships)(initialState, action)
+      const state = relationshipsReducer(options)(initialState, action)
       expect(state).toEqual(expectedState)
     })
 
-    it('concat one items', () => {
+    it('concat one item', () => {
       const payload = {
         type: 'post',
-        relationship: 'comments',
-        comments: { type: 'comment', id: 'test-comment-id-3' }
+        key: 'comments',
+        data: { type: 'comment', id: 'test-comment-id-3' }
       }
       const initialState = makeRelationships()
       const expectedState = {
@@ -253,13 +257,13 @@ describe('Reducers', () => {
           meta: {
             changedData: [
               ...initialState.comments.data,
-              payload.comments
+              payload.data
             ]
           }
         }
       }
       const action = concat(payload)
-      const state = relationshipsReducer(relationships)(initialState, action)
+      const state = relationshipsReducer(options)(initialState, action)
       expect(state).toEqual(expectedState)
     })
 
@@ -275,9 +279,9 @@ describe('Reducers', () => {
           }
         }
       }
-      const payload = { type: 'post', relationship: 'comments', filter: filterFunc }
+      const payload = { type: 'post', key: 'comments', func: filterFunc }
       const action = filter(payload)
-      const state = relationshipsReducer(relationships)(initialState, action)
+      const state = relationshipsReducer(options)(initialState, action)
       expect(state).toEqual(expectedState)
     })
 
@@ -293,9 +297,9 @@ describe('Reducers', () => {
           }
         }
       }
-      const payload = { type: 'post', relationship: 'comments', map: mapFunc }
+      const payload = { type: 'post', key: 'comments', func: mapFunc }
       const action = map(payload)
-      const state = relationshipsReducer(relationships)(initialState, action)
+      const state = relationshipsReducer(options)(initialState, action)
       expect(state).toEqual(expectedState)
     })
 
@@ -311,9 +315,9 @@ describe('Reducers', () => {
           }
         }
       }
-      const payload = { type: 'post', relationship: 'comments', comments: comment }
+      const payload = { type: 'post', key: 'comments', data: comment }
       const action = push(payload)
-      const state = relationshipsReducer(relationships)(initialState, action)
+      const state = relationshipsReducer(options)(initialState, action)
       expect(state).toEqual(expectedState)
     })
 
@@ -328,9 +332,9 @@ describe('Reducers', () => {
           }
         }
       }
-      const payload = { type: 'post', relationship: 'comments' }
+      const payload = { type: 'post', key: 'comments' }
       const action = reverse(payload)
-      const state = relationshipsReducer(relationships)(initialState, action)
+      const state = relationshipsReducer(options)(initialState, action)
       expect(state).toEqual(expectedState)
     })
 
@@ -347,9 +351,9 @@ describe('Reducers', () => {
           }
         }
       }
-      const payload = { type: 'post', relationship: 'comments', begin, end }
+      const payload = { type: 'post', key: 'comments', options: { begin, end } }
       const action = slice(payload)
-      const state = relationshipsReducer(relationships)(initialState, action)
+      const state = relationshipsReducer(options)(initialState, action)
       expect(state).toEqual(expectedState)
     })
 
@@ -373,9 +377,9 @@ describe('Reducers', () => {
           }
         }
       }
-      const payload = { type: 'post', relationship: 'comments', sort: sortFunc }
+      const payload = { type: 'post', key: 'comments', func: sortFunc }
       const action = sort(payload)
-      const state = relationshipsReducer(relationships)(initialState, action)
+      const state = relationshipsReducer(options)(initialState, action)
       expect(state).toEqual(expectedState)
     })
 
@@ -393,9 +397,9 @@ describe('Reducers', () => {
           meta: { changedData }
         }
       }
-      const payload = { type: 'post', relationship: 'comments', start, deleteCount, comments: comment }
+      const payload = { type: 'post', key: 'comments', options: { start, deleteCount }, data: comment }
       const action = splice(payload)
-      const state = relationshipsReducer(relationships)(initialState, action)
+      const state = relationshipsReducer(options)(initialState, action)
       expect(state).toEqual(expectedState)
     })
 
@@ -411,9 +415,9 @@ describe('Reducers', () => {
           meta: { changedData }
         }
       }
-      const payload = { type: 'post', relationship: 'comments', comments: comment }
+      const payload = { type: 'post', key: 'comments', data: comment }
       const action = unshift(payload)
-      const state = relationshipsReducer(relationships)(initialState, action)
+      const state = relationshipsReducer(options)(initialState, action)
       expect(state).toEqual(expectedState)
     })
   })

@@ -18,9 +18,10 @@ const identityReducer = (initialState = {}) => (state = initialState) => state
 
 const itemReducer = handleActions({
   [ITEM_CREATE_NEW]: (state, action) => {
-    const { payload } = action
-    const { type } = payload
-    const item = { ...state, meta: state.meta || {} }
+    const { payload, meta } = action
+    const { data } = payload
+    const { type } = meta
+    const item = { ...data, meta: data.meta || {} }
 
     item.meta.isNew = true
 
@@ -83,8 +84,8 @@ const itemReducer = handleActions({
   },
   [ITEM_ATTRIBUTE_TOGGLE]: (state, action) => {
     const { payload } = action
-    const { attribute } = payload
-    const value = state.attributes[attribute]
+    const { key } = payload
+    const value = state.attributes[key]
 
     const newAction = {
       ...action,
@@ -104,7 +105,7 @@ const skipActions = (constants = []) => reducer => (state, action) => {
 
 export default (state, action) => {
   const { payload, meta } = action
-  const { type, relationships } = meta || {}
+  const { type, options } = meta || {}
   if (!payload) { return state }
 
   return reduceReducers(
@@ -113,7 +114,7 @@ export default (state, action) => {
       type: identityReducer(type),
       id: identityReducer(''),
       attributes: attributesReducer,
-      relationships: relationshipsReducer(relationships),
+      relationships: relationshipsReducer(options),
       meta: skipActions([ITEM_ATTRIBUTE_TOGGLE])(metaReducer)
     })
   )(state, action)
