@@ -1,5 +1,5 @@
 # Reducing reducers
-Reduce reducers allows you to chain reducers to run in sequence. Each reducer in the sequence receives the state from the preceding reducer. It looks like this:
+[Reduce reducers](https://github.com/acdlite/reduce-reducers) allows you to chain reducers to run in sequence. Each reducer in the sequence receives the state from the preceding reducer. It looks like this:
 
 ```js
 // src/modules/media/index.js

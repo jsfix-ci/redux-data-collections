@@ -51,8 +51,8 @@ describe('Selectors', () => {
       const state = makeState()
       const id = resolve(state, 'posts.data[1].id')
       const type = resolve(state, 'posts.data[1].type')
-      const list = state.posts
-      const item = selectItemById(list)(type, id)
+      const collection = state.posts
+      const item = selectItemById(collection)(type, id)
       expect(item.id).toEqual(id)
     })
 
@@ -60,8 +60,8 @@ describe('Selectors', () => {
       const state = makeState()
       const id = resolve(state, 'posts.data[1].id')
       const type = resolve(state, 'posts.data[1].type')
-      const list = state.posts
-      const actual = selectRawItemAttributes(list)(type, id)
+      const collection = state.posts
+      const actual = selectRawItemAttributes(collection)(type, id)
       const expected = resolve(state, 'posts.data[1].attributes')
       expect(actual).toEqual(expected)
     })
@@ -81,8 +81,8 @@ describe('Selectors', () => {
       }))
       const id = resolve(state, 'posts.data[3].id')
       const type = resolve(state, 'posts.data[3].type')
-      const list = state.posts
-      const actual = selectItemChangedAttributes(list)(type, id)
+      const collection = state.posts
+      const actual = selectItemChangedAttributes(collection)(type, id)
       const expected = resolve(state, 'posts.data[3].meta.changedAttributes')
       expect(actual).toEqual(expected)
     })
@@ -104,8 +104,8 @@ describe('Selectors', () => {
       }))
       const id = resolve(state, 'posts.data[3].id')
       const type = resolve(state, 'posts.data[3].type')
-      const list = state.posts
-      const actual = selectItemAttributes(list)(type, id)
+      const collection = state.posts
+      const actual = selectItemAttributes(collection)(type, id)
       const expected = resolve(state, 'posts.data[3].attributes')
       expect(actual).toEqual(expected)
     })
@@ -118,8 +118,8 @@ describe('Selectors', () => {
       }))
       const id = resolve(state, 'posts.data[3].id')
       const type = resolve(state, 'posts.data[3].type')
-      const list = state.posts
-      const actual = selectItemAttributes(list)(type, id)
+      const collection = state.posts
+      const actual = selectItemAttributes(collection)(type, id)
       const expected = resolve(state, 'posts.data[3].meta.changedAttributes')
       expect(actual).toEqual(expected)
     })
@@ -151,8 +151,8 @@ describe('Selectors', () => {
       const id = resolve(state, 'posts.data[3].id')
       const type = resolve(state, 'posts.data[3].type')
       const name = 'name'
-      const list = state.posts
-      const actual = selectItemAttributeByName(list)(type, id, name)
+      const collection = state.posts
+      const actual = selectItemAttributeByName(collection)(type, id, name)
       const expected = resolve(state, `posts.data[3].attributes['${name}']`)
       expect(actual).toEqual(expected)
     })
@@ -166,8 +166,8 @@ describe('Selectors', () => {
       const id = resolve(state, 'posts.data[3].id')
       const type = resolve(state, 'posts.data[3].type')
       const name = 'name'
-      const list = state.posts
-      const actual = selectItemAttributeByName(list)(type, id, name)
+      const collection = state.posts
+      const actual = selectItemAttributeByName(collection)(type, id, name)
       const expected = resolve(state, `posts.data[3].meta.changedAttributes['${name}']`)
       expect(actual).toEqual(expected)
     })
@@ -202,8 +202,8 @@ describe('Selectors', () => {
       const id = resolve(state, 'posts.data[3].id')
       const type = resolve(state, 'posts.data[3].type')
       const name = 'name'
-      const list = state.posts
-      const actual = selectItemRawAttributeByName(list)(type, id, name)
+      const collection = state.posts
+      const actual = selectItemRawAttributeByName(collection)(type, id, name)
       const expected = resolve(state, `posts.data[3].attributes['${name}']`)
       expect(actual).toEqual(expected)
     })
@@ -228,8 +228,8 @@ describe('Selectors', () => {
       const id = resolve(state, 'posts.data[3].id')
       const type = resolve(state, 'posts.data[3].type')
       const name = 'name'
-      const list = state.posts
-      const actual = selectItemChangedAttributeByName(list)(type, id, name)
+      const collection = state.posts
+      const actual = selectItemChangedAttributeByName(collection)(type, id, name)
       const expected = resolve(state, `posts.data[3].meta.changedAttributes['${name}']`)
       expect(actual).toEqual(expected)
     })
@@ -254,8 +254,8 @@ describe('Selectors', () => {
       }))
       const id = resolve(state, 'posts.data[3].id')
       const type = resolve(state, 'posts.data[3].type')
-      const list = state.posts
-      const actual = selectItemRelationships(list)(type, id)
+      const collection = state.posts
+      const actual = selectItemRelationships(collection)(type, id)
       const expected = resolve(state, 'posts.data[3].relationships')
       expect(actual).toEqual(expected)
     })
@@ -270,8 +270,8 @@ describe('Selectors', () => {
       const id = resolve(state, 'posts.data[3].id')
       const type = resolve(state, 'posts.data[3].type')
       const name = 'comments'
-      const list = state.posts
-      const actual = selectItemRelationshipByName(list)(type, id, name)
+      const collection = state.posts
+      const actual = selectItemRelationshipByName(collection)(type, id, name)
       const expected = resolve(state, `posts.data[3].relationships['${name}']`)
       expect(actual).toEqual(expected)
     })

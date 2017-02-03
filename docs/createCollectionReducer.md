@@ -17,7 +17,7 @@ state[collectionName] = {
 ## Example 1: No relationships
 You can create a collection reducer simply by passing a type. This is used by the reducer as an item type. The reducer will filter out actions that do not match the type. It expects actions to have an `action.meta.type` that equals the collection type. This is useful because all of your actions can be shared among all collections &mdash; they all have the same interface.
 
-Here we're creating a collection called "media". This collection will only store items with a type of media, like: `type === item.type`.
+Here we're creating a collection called "media". This collection will only store items with a type of media.
 
 ```js
 // src/modules/media/index.js

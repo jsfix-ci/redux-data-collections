@@ -16,11 +16,15 @@ Below you can see a standard item. Every item has a type and an ID at minimum.
 - `type` is required, should be a valid [member name](http://jsonapi.org/format/1.1/#document-member-names)
 - `id` is required, should be a string, must be unique for the type, consider using a [uuid](https://www.npmjs.com/package/uuid)
 - `attributes` is a key-value object, should be a valid [attributes object](http://jsonapi.org/format/1.1/#document-resource-object-attributes)
+
   **Example:** `const attributes = { title: 'hello' }`
 - `relationships` should be a valid [relationships object](http://jsonapi.org/format/1.1/#document-resource-object-relationships). Should contain a `data` and a `meta` object. The data is a [resource linkage](#document-resource-object-linkage). The `data` may be a single [resource identity object](http://jsonapi.org/format/1.1/#document-resource-identifier-objects) or an array of resource objects.
+
   **Example:** `const data = { type: 'person', id: 'person-uuid-1' }`
+
   **Example:** `const relationships = { author: { data, meta } }`
 - `meta` is a catch all for data "about the item". It is a key value store.
+
   **Example:** `const meta = { isLoaded: true, isSaved: false }`
 
 ```js

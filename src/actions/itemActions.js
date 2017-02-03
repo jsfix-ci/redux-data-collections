@@ -3,6 +3,8 @@ import { createStandardAction } from './'
 import {
   ITEM_CREATE_NEW,
   ITEM_ADD,
+  ITEM_UPDATE,
+
   ITEM_SAVE,
   ITEM_RELOAD,
   ITEM_DELETE,
@@ -19,8 +21,8 @@ import {
 
 // payload: { type, data }
 export const createNew = createStandardAction(ITEM_CREATE_NEW)
-
 export const addItem = createStandardAction(ITEM_ADD)
+export const updateItem = createStandardAction(ITEM_UPDATE)
 
 // saves to server
 // payload: { type, id }
