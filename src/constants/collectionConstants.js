@@ -1,15 +1,11 @@
 export const COLLECTION_ADD_ITEMS = '@@redux-data/COLLECTION_ADD_ITEMS'
-export const COLLECTION_ADD_SET = '@@redux-data/COLLECTION_ADD_SET'
 
 // middleware
 export const COLLECTION_FETCH_ITEMS = '@@redux-data/COLLECTION_FETCH_ITEMS'
-export const COLLECTION_FETCH_SET = '@@redux-data/COLLECTION_FETCH_SET'
 
 // meta / middleware
 export const COLLECTION_BEGIN_LOADING_ITEMS = '@@redux-data/COLLECTION_BEGIN_LOADING_ITEMS'
 export const COLLECTION_END_LOADING_ITEMS = '@@redux-data/COLLECTION_END_LOADING_ITEMS'
-export const COLLECTION_BEGIN_LOADING_SET = '@@redux-data/COLLECTION_BEGIN_LOADING_SET'
-export const COLLECTION_END_LOADING_SET = '@@redux-data/COLLECTION_END_LOADING_SET'
 
 // advanced
 export const COLLECTION_CONCAT = '@@redux-data/COLLECTION_CONCAT'

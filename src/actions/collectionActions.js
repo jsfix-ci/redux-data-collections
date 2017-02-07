@@ -2,17 +2,13 @@ import { createStandardAction } from './'
 
 import {
   COLLECTION_ADD_ITEMS,
-  COLLECTION_ADD_SET,
 
   // middleware
   COLLECTION_FETCH_ITEMS,
-  COLLECTION_FETCH_SET,
 
   // meta
   COLLECTION_BEGIN_LOADING_ITEMS,
   COLLECTION_END_LOADING_ITEMS,
-  COLLECTION_BEGIN_LOADING_SET,
-  COLLECTION_END_LOADING_SET,
 
   // advanced
   COLLECTION_CONCAT,
@@ -26,18 +22,15 @@ import {
   COLLECTION_UNSHIFT
 } from '../constants/collectionConstants'
 
+// TODO: loadItems
 export const addItems = createStandardAction(COLLECTION_ADD_ITEMS)
-export const addSet = createStandardAction(COLLECTION_ADD_SET)
 
 // middleware
 export const fetchItems = createStandardAction(COLLECTION_FETCH_ITEMS)
-export const fetchSet = createStandardAction(COLLECTION_FETCH_SET)
 
 // meta
 export const beginLoadingItems = createStandardAction(COLLECTION_BEGIN_LOADING_ITEMS)
 export const endLoadingItems = createStandardAction(COLLECTION_END_LOADING_ITEMS)
-export const beginLoadingSet = createStandardAction(COLLECTION_BEGIN_LOADING_SET)
-export const endLoadingSet = createStandardAction(COLLECTION_END_LOADING_SET)
 
 // advanced
 // @see https://lodash.com/docs/4.17.2

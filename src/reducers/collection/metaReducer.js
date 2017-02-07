@@ -1,30 +1,41 @@
 import { handleActions } from 'redux-actions'
 import {
-  COLLECTION_ADD_SET,
-  COLLECTION_BEGIN_LOADING,
-  COLLECTION_END_LOADING,
-  COLLECTION_BEGIN_LOADING_SET,
-  COLLECTION_END_LOADING_SET
+  COLLECTION_ADD_ITEMS,
+  COLLECTION_BEGIN_LOADING_ITEMS,
+  COLLECTION_END_LOADING_ITEMS
 } from '../../constants/collectionConstants'
-
+import { selectKey } from '../../selectors/actionSelectors'
 import setsReducer from './setsReducer'
 
 const reducers = {
   sets: setsReducer
 }
 
-const mapKeyToReducer = (key) => (state, action) => ({ ...state, [key]: reducers[key] })
+// TODO: this is clumbsy
+const mapMetaKeyToReducer = (metaKey) => (state, action) => ({
+  ...state,
+  [metaKey]: reducers[metaKey](state[metaKey], action)
+})
 
 const metaReducer = handleActions({
-  [COLLECTION_ADD_SET]: mapKeyToReducer('sets'),
-  [COLLECTION_BEGIN_LOADING_SET]: mapKeyToReducer('sets'),
-  [COLLECTION_END_LOADING_SET]: mapKeyToReducer('sets'),
-
-  [COLLECTION_BEGIN_LOADING]: (state, action) => ({ ...state, isLoading: true }),
-  [COLLECTION_END_LOADING]: (state, action) => ({ ...state, isLoading: false })
+  [COLLECTION_ADD_ITEMS]: (state, action) => {
+    const key = selectKey(action)
+    if (key) { state = mapMetaKeyToReducer('sets')(state, action) }
+    return { ...state, isLoaded: true }
+  },
+  [COLLECTION_BEGIN_LOADING_ITEMS]: (state, action) => {
+    const key = selectKey(action)
+    if (key) { state = mapMetaKeyToReducer('sets')(state, action) }
+    return { ...state, isLoading: true }
+  },
+  [COLLECTION_END_LOADING_ITEMS]: (state, action) => {
+    const key = selectKey(action)
+    if (key) { state = mapMetaKeyToReducer('sets')(state, action) }
+    return { ...state, isLoading: false }
+  }
 }, {})
 
-export default (type, options) => (state = {}, action) => {
+export default (type, key) => (state = {}, action) => {
   if (!action) { return state }
   return metaReducer(state, action)
 }

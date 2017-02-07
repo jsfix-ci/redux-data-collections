@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux'
 import setsDataReducer from './setsDataReducer'
 import setsMetaReducer from './setsMetaReducer'
-import { selectKey } from '../../selectors/actionSelectors'
+import { selectKey, selectOptions } from '../../selectors/actionSelectors'
 
 const setReducer = combineReducers({
   data: setsDataReducer,
@@ -9,7 +9,9 @@ const setReducer = combineReducers({
 })
 
 const setsReducer = (state = {}, action) => {
-  const key = selectKey(action)
+  let key = selectKey(action)
+  const options = selectOptions(action)
+  if (options && options.page) { key = `${key}:${options.page}` }
   return { ...state, [key]: setReducer(state[key], action) }
 }
 

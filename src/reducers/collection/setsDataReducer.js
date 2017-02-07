@@ -1,13 +1,16 @@
 import { handleActions } from 'redux-actions'
 import {
-  COLLECTION_ADD_SET
+  COLLECTION_ADD_ITEMS
 } from '../../constants/collectionConstants'
 import { selectData } from '../../selectors/actionSelectors'
 
+const mapItemToIdentifier = ({ type, id }) => ({ type, id })
+
 const setsDataReducer = handleActions({
-  [COLLECTION_ADD_SET]: (state, action) => {
+  [COLLECTION_ADD_ITEMS]: (state, action) => {
     const data = selectData(action)
-    return data || state
+    if (!data) { return state }
+    return data.map(mapItemToIdentifier)
   }
 }, [])
 
