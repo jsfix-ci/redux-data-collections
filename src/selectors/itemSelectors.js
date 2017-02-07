@@ -1,9 +1,9 @@
+import { selectValueByKey } from './'
 // TODO: move to a more generic location
 export const selectData = (item) => selectValueByKey(item)('data')
 export const selectMeta = (item) => selectValueByKey(item)('meta')
 export const selectId = (item) => selectValueByKey(item)('id')
 export const selectType = (item) => selectValueByKey(item)('type')
-export const selectValueByKey = (item) => (key) => item !== undefined ? item[key] : undefined
 
 // state is a list with data and meta
 export const selectItemById = (state) => (type, id) => {

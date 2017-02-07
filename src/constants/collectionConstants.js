@@ -1,9 +1,13 @@
 export const COLLECTION_ADD_ITEMS = '@@redux-data/COLLECTION_ADD_ITEMS'
 export const COLLECTION_ADD_SET = '@@redux-data/COLLECTION_ADD_SET'
 
-// meta
-export const COLLECTION_BEGIN_LOADING = '@@redux-data/COLLECTION_BEGIN_LOADING'
-export const COLLECTION_END_LOADING = '@@redux-data/COLLECTION_END_LOADING'
+// middleware
+export const COLLECTION_FETCH_ITEMS = '@@redux-data/COLLECTION_FETCH_ITEMS'
+export const COLLECTION_FETCH_SET = '@@redux-data/COLLECTION_FETCH_SET'
+
+// meta / middleware
+export const COLLECTION_BEGIN_LOADING_ITEMS = '@@redux-data/COLLECTION_BEGIN_LOADING_ITEMS'
+export const COLLECTION_END_LOADING_ITEMS = '@@redux-data/COLLECTION_END_LOADING_ITEMS'
 export const COLLECTION_BEGIN_LOADING_SET = '@@redux-data/COLLECTION_BEGIN_LOADING_SET'
 export const COLLECTION_END_LOADING_SET = '@@redux-data/COLLECTION_END_LOADING_SET'
 

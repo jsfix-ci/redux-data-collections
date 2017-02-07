@@ -1,5 +1,8 @@
 import { createAction as defaultCreateAction } from 'redux-actions'
 
+// export * from './collectionActions'
+// export * from './itemActions'
+
 /** expect an object with one of these keys:
 - type, id -- to identify the entity, blank id means collection
 - data -- either an entity or a collection (array) of entities
@@ -13,8 +16,3 @@ export const payloadCreator = ({ data, options, key, value, func } = {}) => ({ d
 export const metaCreator = ({ type, id } = {}) => ({ type, id })
 
 export const createStandardAction = type => defaultCreateAction(type, payloadCreator, metaCreator)
-
-export const wrapAction = (type, id, action, key) => (payload) => {
-  if (key) { return action({ type, id, [key]: payload }) }
-  return action({ type, id, ...payload })
-}

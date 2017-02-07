@@ -1,3 +1,3 @@
 export * from './itemConstants'
-export * from './listConstants'
+export * from './collectionConstants'
 export * from './relationshipConstants'
