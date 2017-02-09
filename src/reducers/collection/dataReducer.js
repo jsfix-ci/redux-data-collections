@@ -31,8 +31,9 @@ const mapActionToItemReducer = (type, id) => (state, action) => {
   // immutable find and splice
   // @see http://vincent.billey.me/pure-javascript-immutable-array
   state.some((item, i) => {
-    if (item.type === type && item.id === id) {
-      newState = [ ...state.slice(0, i), itemReducer(item, action), ...state.slice(i) ]
+    // TODO: should also match type, but sometimes collection type is plural and item type is singular
+    if (item.id === id) {
+      newState = [ ...state.slice(0, i), itemReducer(item, action), ...state.slice(i + 1) ]
     }
     return false
   })

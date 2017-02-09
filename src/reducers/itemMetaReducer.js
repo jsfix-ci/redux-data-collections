@@ -150,7 +150,6 @@ const itemMetaReducer = handleActions({
     }
     return newState
   },
-
   [ITEM_META_SET]: (state, action) => {
     const key = selectKey(action)
     const value = selectValue(action)
