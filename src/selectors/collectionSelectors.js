@@ -22,7 +22,14 @@ export const selectItems = state => ({ type, key, options }) => {
   const collection = selectRootOfType(state)(type)
   const data = selectCollectionData(collection)
   if (key) {
-    const set = selectSet(state)({ type, key, options }).data
+    let set
+    if (options && options.page) {
+      const page = selectSet({ type, key, options })
+      set = page && page.data
+    } else {
+      set = selectFullSetItems(state)({ type, key, options })
+    }
+    if (!set) { return [] }
     return set.map(({ type, id }) => data.find(item => item.type === type && item.id === id))
   }
   return data
@@ -33,7 +40,27 @@ export const selectSet = state => ({ type, key, options }) => {
   const meta = selectCollectionMeta(collection)
   const { sets } = meta
   if (!sets) { return }
-  return sets[key]
+  let page = '1'
+  if (options && options.page) { page = `${options.page}` }
+  const set = sets[key]
+  if (!set) { return }
+  return set[page]
+}
+
+export const selectFullSetItems = state => ({ type, key, options }) => {
+  const collection = selectRootOfType(state)(type)
+  const meta = selectCollectionMeta(collection)
+  const { sets } = meta
+  if (!sets) { return }
+  const set = sets[key]
+  if (!set) { return }
+  const items = Object.keys(set).sort().reduce((list, page) => {
+    const setPage = set[page]
+    const { data } = setPage
+    if (data) { return list.concat(data) }
+    return list
+  }, [])
+  return items
 }
 
 // ----
