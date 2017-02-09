@@ -5,8 +5,13 @@ import {
   ITEM_ATTRIBUTE_SET,
   ITEM_ATTRIBUTE_RESET,
   ITEM_ATTRIBUTE_TOGGLE,
-  ITEM_ATTRIBUTE_DELETE
+  ITEM_ATTRIBUTE_DELETE,
+
+  ITEM_META_SET,
+  ITEM_META_TOGGLE,
+  ITEM_META_DELETE
 } from '../constants/itemConstants'
+import { selectType, selectId, selectData, selectKey, selectValue } from '../selectors/actionSelectors'
 
 const removeAttribute = (state, action) => {
   const { payload } = action
@@ -143,6 +148,25 @@ const itemMetaReducer = handleActions({
         delete newState.changedAttributes
       }
     }
+    return newState
+  },
+
+  [ITEM_META_SET]: (state, action) => {
+    const key = selectKey(action)
+    const value = selectValue(action)
+    if (!key) { return state }
+    return { ...state, [key]: value }
+  },
+  [ITEM_META_TOGGLE]: (state, action) => {
+    const key = selectKey(action)
+    if (!key) { return state }
+    return { ...state, [key]: !state[key] }
+  },
+  [ITEM_META_DELETE]: (state, action) => {
+    const key = selectKey(action)
+    if (!key) { return state }
+    const newState = { ...state }
+    delete newState[key]
     return newState
   }
 }, {})

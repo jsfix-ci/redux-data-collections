@@ -14,3 +14,7 @@ export const ITEM_ATTRIBUTE_SET = '@@redux-data/ITEM_ATTRIBUTE_SET'
 export const ITEM_ATTRIBUTE_RESET = '@@redux-data/ITEM_ATTRIBUTE_RESET'
 export const ITEM_ATTRIBUTE_TOGGLE = '@@redux-data/ITEM_ATTRIBUTE_TOGGLE'
 export const ITEM_ATTRIBUTE_DELETE = '@@redux-data/ITEM_ATTRIBUTE_DELETE'
+
+export const ITEM_META_SET = '@@redux-data/ITEM_META_SET'
+export const ITEM_META_TOGGLE = '@@redux-data/ITEM_META_TOGGLE'
+export const ITEM_META_DELETE = '@@redux-data/ITEM_META_DELETE'

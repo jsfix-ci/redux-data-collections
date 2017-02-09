@@ -16,7 +16,11 @@ import {
   ITEM_ATTRIBUTE_SET,
   ITEM_ATTRIBUTE_RESET,
   ITEM_ATTRIBUTE_TOGGLE,
-  ITEM_ATTRIBUTE_DELETE
+  ITEM_ATTRIBUTE_DELETE,
+
+  ITEM_META_SET,
+  ITEM_META_TOGGLE,
+  ITEM_META_DELETE
  } from '../constants/itemConstants'
 
 // payload: { type, data }
@@ -45,14 +49,18 @@ export const rollbackAttributes = createStandardAction(ITEM_ATTRIBUTES_ROLLBACK)
 
 export const setAttributes = createStandardAction(ITEM_ATTRIBUTES_SET)
 
-// payload: { type, id, attribute, value }
+// payload: { type, id, key, value }
 export const setAttribute = createStandardAction(ITEM_ATTRIBUTE_SET)
 
-// payload: { type, id, attribute }
+// payload: { type, id, key }
 export const resetAttribute = createStandardAction(ITEM_ATTRIBUTE_RESET)
 
-// payload: { type, id, attribute }
+// payload: { type, id, key }
 export const toggleAttribute = createStandardAction(ITEM_ATTRIBUTE_TOGGLE)
 
-// payload: { type, id, attribute }
+// payload: { type, id, key }
 export const deleteAttribute = createStandardAction(ITEM_ATTRIBUTE_DELETE)
+
+export const setMetaKey = createStandardAction(ITEM_META_SET)
+export const toggleMetaKey = createStandardAction(ITEM_META_TOGGLE)
+export const deleteMetaKey = createStandardAction(ITEM_META_DELETE)
