@@ -11,11 +11,10 @@ import {
   ITEM_META_TOGGLE,
   ITEM_META_DELETE
 } from '../constants/itemConstants'
-import { selectType, selectId, selectData, selectKey, selectValue } from '../selectors/actionSelectors'
+import { selectData, selectKey, selectValue } from '../selectors/actionSelectors'
 
 const removeAttribute = (state, action) => {
-  const { payload } = action
-  const { key } = payload
+  const key = selectKey(action)
   const newState = { ...state }
   delete newState[key]
   return newState
@@ -23,8 +22,8 @@ const removeAttribute = (state, action) => {
 
 const changedAttributesReducer = handleActions({
   [ITEM_ATTRIBUTE_SET]: (state, action) => {
-    const { payload } = action
-    const { key, value } = payload
+    const key = selectKey(action)
+    const value = selectValue(action)
     return {
       ...state,
       [key]: value
@@ -32,9 +31,9 @@ const changedAttributesReducer = handleActions({
   },
   [ITEM_ATTRIBUTE_RESET]: removeAttribute,
   [ITEM_ATTRIBUTE_TOGGLE]: (state, action) => {
-    const { payload, meta } = action
-    const { value } = meta || {}
-    const { key } = payload
+    const { meta } = action
+    const { value } = meta || {} // value from item.attributes
+    const key = selectKey(action)
     const newValue = state[key] === undefined ? !value : !state[key]
     if (newValue === value) {
       const newState = { ...state }
@@ -51,14 +50,12 @@ const changedAttributesReducer = handleActions({
 
 const deletedAttributesReducer = handleActions({
   [ITEM_ATTRIBUTE_RESET]: (state, action) => {
-    const { payload } = action
-    const { key } = payload
-    return state.filter(value => !key)
+    const key = selectKey(action)
+    return state.filter(value => !key) // TODO: this looks wrong
   },
   [ITEM_ATTRIBUTE_DELETE]: (state, action) => {
-    const { payload } = action
-    const { key } = payload
-    return [ ...state, key ]
+    const key = selectKey(action)
+    return [ ...state, key ] // TODO: this looks wrong
   }
 }, [])
 
@@ -70,8 +67,7 @@ const itemMetaReducer = handleActions({
     return newState
   },
   [ITEM_ATTRIBUTES_SET]: (state, action) => {
-    const { payload } = action
-    const { data } = payload
+    const data = selectData(action)
     const { changedAttributes } = state
 
     return {
