@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux'
 import setsDataReducer from './setsDataReducer'
 import setsMetaReducer from './setsMetaReducer'
-import { selectKey, selectOptions } from '../../selectors/actionSelectors'
+import { selectKey, selectOptions } from '../../selectors/action'
 
 const setPageReducer = combineReducers({
   data: setsDataReducer,

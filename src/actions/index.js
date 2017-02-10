@@ -1,7 +1,7 @@
 import { createAction as defaultCreateAction } from 'redux-actions'
 
-// export * from './collectionActions'
-// export * from './itemActions'
+// export * from './collection'
+// export * from './item'
 
 /** expect an object with one of these keys:
 - type, id -- to identify the entity, blank id means collection

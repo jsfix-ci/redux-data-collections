@@ -1,3 +1,5 @@
+export const COLLECTION_LOAD_ITEMS = '@@redux-data/COLLECTION_LOAD_ITEMS'
+export const COLLECTION_LOAD_INCLUDED_ITEMS = '@@redux-data/COLLECTION_LOAD_INCLUDED_ITEMS'
 export const COLLECTION_ADD_ITEMS = '@@redux-data/COLLECTION_ADD_ITEMS'
 
 // middleware

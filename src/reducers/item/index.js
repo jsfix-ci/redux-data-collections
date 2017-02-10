@@ -2,17 +2,18 @@ import { combineReducers } from 'redux'
 import { handleActions } from 'redux-actions'
 import reduceReducers from 'reduce-reducers'
 import uuid from 'uuid/v4'
-import relationshipsReducer from './relationshipsReducer'
 import {
   ITEM_CREATE_NEW,
   ITEM_ADD,
-  ITEM_SAVE,
+  ITEM_SAVE
+} from '../../constants/item'
+import {
   ITEM_ATTRIBUTES_ROLLBACK,
   ITEM_ATTRIBUTE_TOGGLE
-} from '../constants/itemConstants'
-
-import metaReducer from './itemMetaReducer'
-import attributesReducer from './attributesReducer'
+} from '../../constants/attributes'
+import attributesReducer from '../attributes'
+import relationshipsReducer from '../relationships'
+import metaReducer from './metaReducer'
 
 const identityReducer = (initialState = {}) => (state = initialState) => state
 
@@ -113,7 +114,7 @@ export default (state, action) => {
     combineReducers({
       type: identityReducer(type),
       id: identityReducer(''),
-      attributes: attributesReducer,
+      attributes: attributesReducer(options),
       relationships: relationshipsReducer(options),
       meta: skipActions([ITEM_ATTRIBUTE_TOGGLE])(metaReducer)
     })

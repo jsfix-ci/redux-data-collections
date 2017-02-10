@@ -3,8 +3,8 @@ import {
   COLLECTION_ADD_ITEMS,
   COLLECTION_BEGIN_LOADING_ITEMS,
   COLLECTION_END_LOADING_ITEMS
-} from '../../constants/collectionConstants'
-import { selectOptions } from '../../selectors/actionSelectors'
+} from '../../constants/collection'
+import { selectOptions } from '../../selectors/action'
 
 const setsMetaReducer = handleActions({
   [COLLECTION_ADD_ITEMS]: (state, action) => ({

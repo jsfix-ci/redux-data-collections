@@ -1,27 +1,5 @@
 import { combineReducers } from 'redux'
-import relationshipDataReducer from './relationshipDataReducer'
-import relationshipMetaReducer from './relationshipMetaReducer'
-
-const relationshipReducer = (config) => {
-  const reducer = combineReducers({
-    data: relationshipDataReducer(config),
-    meta: relationshipMetaReducer(config)
-  })
-
-  return (state = {}, action) => {
-    if (!action.meta) { return state }
-
-    // alter the action before passing to reducer
-    const newAction = {
-      ...action,
-      meta: {
-        ...action.meta,
-        relationshipData: state.data
-      }
-    }
-    return reducer(state, newAction)
-  }
-}
+import relationshipReducer from './relationshipReducer'
 
 // NOTE: relationships = [{ key = 'comments', isOne = false, accepts = ['comment'] }]
 const relationshipsReducer = (options = {}) => (state = {}, action) => {

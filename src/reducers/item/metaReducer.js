@@ -1,17 +1,19 @@
 import { handleActions } from 'redux-actions'
 import {
   ITEM_SAVE,
-  ITEM_ATTRIBUTES_SET,
-  ITEM_ATTRIBUTE_SET,
-  ITEM_ATTRIBUTE_RESET,
-  ITEM_ATTRIBUTE_TOGGLE,
-  ITEM_ATTRIBUTE_DELETE,
 
   ITEM_META_SET,
   ITEM_META_TOGGLE,
   ITEM_META_DELETE
-} from '../constants/itemConstants'
-import { selectData, selectKey, selectValue } from '../selectors/actionSelectors'
+} from '../../constants/item'
+import {
+  ITEM_ATTRIBUTES_SET_OBJECT,
+  ITEM_ATTRIBUTE_SET,
+  ITEM_ATTRIBUTE_RESET,
+  ITEM_ATTRIBUTE_TOGGLE,
+  ITEM_ATTRIBUTE_DELETE
+} from '../../constants/attributes'
+import { selectData, selectKey, selectValue } from '../../selectors/action'
 
 const removeAttribute = (state, action) => {
   const key = selectKey(action)
@@ -66,7 +68,7 @@ const itemMetaReducer = handleActions({
     delete newState.deletedAttributes
     return newState
   },
-  [ITEM_ATTRIBUTES_SET]: (state, action) => {
+  [ITEM_ATTRIBUTES_SET_OBJECT]: (state, action) => {
     const data = selectData(action)
     const { changedAttributes } = state
 

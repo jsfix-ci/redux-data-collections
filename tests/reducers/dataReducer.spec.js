@@ -1,6 +1,6 @@
 import dataReducer from 'reducers/collection/dataReducer'
-import { createNew } from 'actions/itemActions'
-import { concat, filter, map, push, reverse, slice, sort, splice, unshift } from 'actions/collectionActions'
+import { createNew } from 'actions/item'
+import { concat, filter, map, push, reverse, slice, sort, splice, unshift } from 'actions/collection'
 
 import data from '../../exampleData/posts.json'
 

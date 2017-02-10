@@ -23,7 +23,7 @@ import {
   selectRelationshipData,
   selectRelationshipRawData,
   selectRelationshipChangedData
-} from 'selectors/itemSelectors'
+} from 'selectors/item'
 
 let count = 0
 const makePost = ({ attributes = {}, relationships = {}, meta = {} } = {}) => {

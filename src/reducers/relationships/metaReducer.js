@@ -16,7 +16,7 @@ import {
   // RELATIONSHIP_MANY_SORT,
   // RELATIONSHIP_MANY_SPLICE,
   // RELATIONSHIP_MANY_UNSHIFT
-} from '../constants/relationshipConstants'
+} from '../../constants/relationships'
 
 import changedDataReducer from './changedDataReducer'
 

@@ -12,12 +12,12 @@ import {
   RELATIONSHIP_MANY_SORT,
   RELATIONSHIP_MANY_SPLICE,
   RELATIONSHIP_MANY_UNSHIFT
-} from '../constants/relationshipConstants'
+} from '../../constants/relationships'
 import invariant from 'invariant'
 
 const either = (state, data) => state.length && state || data
 
-const changedDataReducer = ({ isOne, accepts }) => {
+const changedDataReducer = ({ isOne = false, accepts }) => {
   const isValid = (state, action) => {
     const { payload } = action
     if (!payload) {
@@ -32,6 +32,7 @@ const changedDataReducer = ({ isOne, accepts }) => {
     return true
   }
   const canAccept = (item) => {
+    if (!accepts) { return true }
     let isAccepted = true
     if (!Array.isArray(item)) {
       isAccepted = accepts.includes(item.type)

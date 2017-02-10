@@ -1,8 +1,8 @@
 import { handleActions } from 'redux-actions'
 import {
   COLLECTION_ADD_ITEMS
-} from '../../constants/collectionConstants'
-import { selectData } from '../../selectors/actionSelectors'
+} from '../../constants/collection'
+import { selectData } from '../../selectors/action'
 
 const mapItemToIdentifier = ({ type, id }) => ({ type, id })
 

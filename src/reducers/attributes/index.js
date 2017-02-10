@@ -1,11 +1,15 @@
+// NOTE: buffered -- most attribute related actions happen in ../item/meta.js
 import { handleActions } from 'redux-actions'
 import {
-  ITEM_ATTRIBUTES_MAP
+  // overrides
   // TODO:
-  // ITEM_ATTRIBUTE_FORCE_SET,
-  // ITEM_ATTRIBUTE_FORCE_TOGGLE,
-  // ITEM_ATTRIBUTE_FORCE_DELETE
-} from '../constants/itemConstants'
+  // ITEM_ATTRIBUTE_RAW_SET,
+  // ITEM_ATTRIBUTE_RAW_TOGGLE,
+  // ITEM_ATTRIBUTE_RAW_DELETE
+
+  // advanced -- allows to map, reduce the entire attributes object
+  ITEM_ATTRIBUTES_MAP
+} from '../../constants/attributes'
 
 // const mapActionToAttributeReducer = (state, action) => {
 //   const { payload } = action
@@ -33,4 +37,4 @@ const attributesReducer = handleActions({
   }
 }, {})
 
-export default attributesReducer
+export default options => attributesReducer

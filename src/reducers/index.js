@@ -1,11 +1,11 @@
-import { combineReducers } from 'redux'
-import dataReducer from './collection/dataReducer'
-import metaReducer from './collection/metaReducer'
+import collectionReducer from './collection'
+import itemReducer from './item'
+import attributesReducer from './attributes'
+import relationshipsReducer from './relationships'
 
-const reducer = (type, options) => combineReducers({
-  data: dataReducer(type, options),
-  meta: metaReducer(type, options)
-})
-
-export { dataReducer, metaReducer }
-export default reducer
+export {
+  itemReducer,
+  attributesReducer,
+  relationshipsReducer
+ }
+export default collectionReducer

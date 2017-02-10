@@ -1,6 +1,8 @@
 import { createStandardAction } from './'
 
 import {
+  COLLECTION_LOAD_ITEMS,
+  COLLECTION_LOAD_INCLUDED_ITEMS,
   COLLECTION_ADD_ITEMS,
 
   // middleware
@@ -20,9 +22,10 @@ import {
   COLLECTION_SORT,
   COLLECTION_SPLICE,
   COLLECTION_UNSHIFT
-} from '../constants/collectionConstants'
+} from '../constants/collection'
 
-// TODO: loadItems
+export const loadItems = createStandardAction(COLLECTION_LOAD_ITEMS)
+export const loadIncludedItems = createStandardAction(COLLECTION_LOAD_INCLUDED_ITEMS)
 export const addItems = createStandardAction(COLLECTION_ADD_ITEMS)
 
 // middleware
@@ -33,6 +36,7 @@ export const beginLoadingItems = createStandardAction(COLLECTION_BEGIN_LOADING_I
 export const endLoadingItems = createStandardAction(COLLECTION_END_LOADING_ITEMS)
 
 // advanced
+// @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array
 // @see https://lodash.com/docs/4.17.2
 // TODO: difference, intersection, union
 export const concat = createStandardAction(COLLECTION_CONCAT)

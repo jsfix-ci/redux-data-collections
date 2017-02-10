@@ -1,3 +1,4 @@
-export * from './itemConstants'
-export * from './collectionConstants'
-export * from './relationshipConstants'
+export * from './collection'
+export * from './item'
+export * from './attributes'
+export * from './relationships'

@@ -1,10 +1,10 @@
 import { handleActions } from 'redux-actions'
 import reduceReducers from 'reduce-reducers'
-import itemReducer from '../itemReducer'
+import itemReducer from '../item'
 import {
   ITEM_CREATE_NEW,
   ITEM_ADD
-} from '../../constants/itemConstants'
+} from '../../constants/item'
 import {
   COLLECTION_ADD_ITEMS,
   COLLECTION_ADD_SET,
@@ -19,9 +19,9 @@ import {
   COLLECTION_SORT,
   COLLECTION_SPLICE,
   COLLECTION_UNSHIFT
-} from '../../constants/collectionConstants'
-import { addItem, updateItem } from '../../actions/itemActions'
-import { selectType, selectId, selectData } from '../../selectors/actionSelectors'
+} from '../../constants/collection'
+import { addItem, updateItem } from '../../actions/item'
+import { selectType, selectId, selectData } from '../../selectors/action'
 
 // routes actions to items using action.meta.id
 const mapActionToItemReducer = (type, id) => (state, action) => {

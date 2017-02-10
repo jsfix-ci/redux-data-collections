@@ -1,4 +1,4 @@
-import relationshipsReducer from 'reducers/relationshipsReducer'
+import relationshipsReducer from 'reducers/relationships'
 import {
   reset,
   set,
@@ -13,7 +13,7 @@ import {
   sort,
   splice,
   unshift
-} from 'actions/relationshipActions'
+} from 'actions/relationships'
 
 const makeRelationships = (relationship, meta) => {
   const state = {

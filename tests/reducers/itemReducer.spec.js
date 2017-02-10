@@ -1,18 +1,21 @@
-import itemReducer from 'reducers/itemReducer'
+import itemReducer from 'reducers/item'
 import {
   // createNew,
-  save,
+  saveItem
   // reload,
   // deleteItem,
-  // destroyItem,
+  // destroyItem
+} from 'actions/item'
+
+import {
   mapAttributes,
   rollbackAttributes,
-  setAttributes,
+  setAttributesObject,
   setAttribute,
   resetAttribute,
   toggleAttribute,
   deleteAttribute
-} from 'actions/itemActions'
+} from 'actions/attributes'
 
 let count = 0
 const makePost = ({ attributes = {}, relationships = {}, meta = {} } = {}) => {
@@ -35,7 +38,7 @@ describe('Reducers', () => {
       expect(state).toEqual(expectedState)
     })
 
-    it('save', () => {
+    it('saveItem', () => {
       const initialState = makePost({
         attributes: { name: 'Original value' },
         meta: {
@@ -50,7 +53,7 @@ describe('Reducers', () => {
       }
 
       const payload = { type: 'post', id: initialState.id }
-      const action = save(payload)
+      const action = saveItem(payload)
       const state = itemReducer(initialState, action)
       expect(state).toEqual(expectedState)
     })
@@ -124,14 +127,14 @@ describe('Reducers', () => {
       expect(state).toEqual(expectedState)
     })
 
-    it('setAttributes', () => {
+    it('setAttributesObject', () => {
       const initialState = makePost({ attributes: { name: 'Old' } })
       const payload = { type: 'post', id: initialState.id, data: { name: 'New', description: 'Something' } }
       const expectedState = {
         ...initialState,
         meta: { changedAttributes: payload.data, isSaved: false }
       }
-      const action = setAttributes(payload)
+      const action = setAttributesObject(payload)
       const state = itemReducer(initialState, action)
       expect(state).toEqual(expectedState)
     })

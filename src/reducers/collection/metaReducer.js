@@ -3,8 +3,8 @@ import {
   COLLECTION_ADD_ITEMS,
   COLLECTION_BEGIN_LOADING_ITEMS,
   COLLECTION_END_LOADING_ITEMS
-} from '../../constants/collectionConstants'
-import { selectKey } from '../../selectors/actionSelectors'
+} from '../../constants/collection'
+import { selectKey } from '../../selectors/action'
 import setsReducer from './setsReducer'
 
 const reducers = {
