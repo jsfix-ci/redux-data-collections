@@ -6,8 +6,8 @@ import {
   ITEM_ADD
 } from '../../constants/item'
 import {
+  COLLECTION_LOAD_ITEMS,
   COLLECTION_ADD_ITEMS,
-  COLLECTION_ADD_SET,
 
   // advanced
   COLLECTION_CONCAT,
@@ -57,6 +57,11 @@ const dataReducer = handleActions({
     if (item) { return state } // <-- already added, bail
     return [...state, itemReducer(item, action)]
   },
+  [COLLECTION_LOAD_ITEMS]: (state, action) => {
+    action = { ...action }
+    action.type = COLLECTION_ADD_ITEMS
+    return dataReducer(state, action)
+  },
   [COLLECTION_ADD_ITEMS]: (state, action) => {
     const type = selectType(action)
     const data = selectData(action)
@@ -86,10 +91,6 @@ const dataReducer = handleActions({
         return itemReducer(undefined, newAction)
       })
     ]
-  },
-  [COLLECTION_ADD_SET]: (state, action) => {
-    const newAction = { ...action, type: COLLECTION_ADD_ITEMS }
-    return dataReducer(state, newAction)
   },
   [COLLECTION_CONCAT]: (state, action) => {
     const { payload } = action || {}

@@ -1,5 +1,6 @@
 import { handleActions } from 'redux-actions'
 import {
+  COLLECTION_LOAD_ITEMS,
   COLLECTION_ADD_ITEMS,
   COLLECTION_BEGIN_LOADING_ITEMS,
   COLLECTION_END_LOADING_ITEMS
@@ -18,6 +19,11 @@ const mapMetaKeyToReducer = (metaKey) => (state, action) => ({
 })
 
 const metaReducer = handleActions({
+  [COLLECTION_LOAD_ITEMS]: (state, action) => {
+    action = { ...action }
+    action.type = COLLECTION_ADD_ITEMS
+    return metaReducer(state, action)
+  },
   [COLLECTION_ADD_ITEMS]: (state, action) => {
     const key = selectKey(action)
     if (key) { state = mapMetaKeyToReducer('sets')(state, action) }
