@@ -9,6 +9,10 @@ import {
   COLLECTION_LOAD_ITEMS,
   COLLECTION_ADD_ITEMS,
 
+  // all
+  COLLECTION_SET_ALL_META,
+  COLLECTION_DELETE_ALL_META,
+
   // advanced
   COLLECTION_CONCAT,
   COLLECTION_FILTER,
@@ -20,8 +24,8 @@ import {
   COLLECTION_SPLICE,
   COLLECTION_UNSHIFT
 } from '../../constants/collection'
-import { addItem, updateItem } from '../../actions/item'
-import { selectType, selectId, selectData } from '../../selectors/action'
+import { addItem, updateItem, setMetaKey, deleteMetaKey } from '../../actions/item'
+import { selectType, selectId, selectData, selectKey, selectValue } from '../../selectors/action'
 
 // routes actions to items using action.meta.id
 const mapActionToItemReducer = (type, id) => (state, action) => {
@@ -91,6 +95,24 @@ const dataReducer = handleActions({
         return itemReducer(undefined, newAction)
       })
     ]
+  },
+  [COLLECTION_SET_ALL_META]: (state, action) => {
+    const type = selectType(action)
+    const key = selectKey(action)
+    const value = selectValue(action)
+    return state.map(item => {
+      const newAction = setMetaKey({ type, id: item.id, key, value })
+      return itemReducer(item, newAction)
+    })
+  },
+  [COLLECTION_DELETE_ALL_META]: (state, action) => {
+    const type = selectType(action)
+    const key = selectKey(action)
+    const value = selectValue(action)
+    return state.map(item => {
+      const newAction = deleteMetaKey({ type, id: item.id, key, value })
+      return itemReducer(item, newAction)
+    })
   },
   [COLLECTION_CONCAT]: (state, action) => {
     const { payload } = action || {}

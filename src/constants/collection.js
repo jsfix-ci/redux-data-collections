@@ -9,6 +9,10 @@ export const COLLECTION_FETCH_ITEMS = '@@redux-data/COLLECTION_FETCH_ITEMS'
 export const COLLECTION_BEGIN_LOADING_ITEMS = '@@redux-data/COLLECTION_BEGIN_LOADING_ITEMS'
 export const COLLECTION_END_LOADING_ITEMS = '@@redux-data/COLLECTION_END_LOADING_ITEMS'
 
+  // all
+export const COLLECTION_SET_ALL_META = '@@redux-data/COLLECTION_SET_ALL_META'
+export const COLLECTION_DELETE_ALL_META = '@@redux-data/COLLECTION_DELETE_ALL_META'
+
 // advanced
 export const COLLECTION_CONCAT = '@@redux-data/COLLECTION_CONCAT'
 export const COLLECTION_FILTER = '@@redux-data/COLLECTION_FILTER'

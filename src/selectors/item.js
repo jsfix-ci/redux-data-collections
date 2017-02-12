@@ -1,14 +1,63 @@
-import { selectValueByKey } from './'
-// TODO: move to a more generic location
-export const selectData = (item) => selectValueByKey(item)('data')
-export const selectMeta = (item) => selectValueByKey(item)('meta')
-export const selectId = (item) => selectValueByKey(item)('id')
-export const selectType = (item) => selectValueByKey(item)('type')
+import { selectValueByKey, selectData, selectMeta, selectId, selectType } from './'
+import { selectItems } from './collection'
+import get from 'lodash.get'
 
-// state is a list with data and meta
+// TODO: move to a more generic location
+
+// payload: { type, id, key, options }
+export const selectItem = (state) => (payload) => {
+  const { type, id, options } = payload
+  const items = selectItems(state)(payload)
+  if (!Array.isArray(items)) { return undefined }
+  if (!id && options) {
+    const { slug } = options
+    return items.find(item => {
+      const value = selectRawAttributeByName(item)('slug')
+      return value === slug
+    })
+  }
+  return items.find(item => item.type === type && item.id === id)
+}
+
+export const selectItemIsLoading = state => payload => {
+  const item = selectItem(state)(payload)
+  const meta = selectMeta(item)
+  return selectValueByKey(meta)('isLoading')
+}
+
+export const selectItemIsLoaded = state => payload => {
+  const item = selectItem(state)(payload)
+  const meta = selectMeta(item)
+  return selectValueByKey(meta)('IsLoaded')
+}
+
+export const selectItemAttribute = state => payload => {
+  const item = selectItem(state)(payload)
+  const { key } = payload
+  return selectAttribute(item)(key)
+}
+
+export const selectAttribute = item => key => {
+  const attributes = selectAttributes(item)
+  return get(attributes, key)
+}
+
+export const selectItemMetaKey = state => payload => {
+  const item = selectItem(state)(payload)
+  const { key } = payload
+  return selectMetaKey(item)(key)
+}
+
+export const selectMetaKey = item => key => {
+  const meta = selectMeta(item)
+  return get(meta, key)
+}
+
+// ---
 export const selectItemById = (state) => (type, id) => {
-  const data = selectData(state)
-  return Array.isArray(data) ? data.find(item => item.type === type && item.id === id) : undefined
+  const items = selectItems(state)({ type })
+  if (!Array.isArray(items)) { return undefined }
+  return items.find(item => item.type === type && item.id === id)
 }
 
 export const selectRawItemAttributes = (state) => (type, id) => {

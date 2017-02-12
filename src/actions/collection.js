@@ -12,6 +12,10 @@ import {
   COLLECTION_BEGIN_LOADING_ITEMS,
   COLLECTION_END_LOADING_ITEMS,
 
+  // all
+  COLLECTION_SET_ALL_META,
+  COLLECTION_DELETE_ALL_META,
+
   // advanced
   COLLECTION_CONCAT,
   COLLECTION_FILTER,
@@ -34,6 +38,9 @@ export const fetchItems = createStandardAction(COLLECTION_FETCH_ITEMS)
 // meta
 export const beginLoadingItems = createStandardAction(COLLECTION_BEGIN_LOADING_ITEMS)
 export const endLoadingItems = createStandardAction(COLLECTION_END_LOADING_ITEMS)
+
+export const setAllMetaKey = createStandardAction(COLLECTION_SET_ALL_META)
+export const deleteAllMetaKey = createStandardAction(COLLECTION_DELETE_ALL_META)
 
 // advanced
 // @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array
