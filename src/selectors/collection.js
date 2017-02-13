@@ -28,7 +28,6 @@ export const selectItems = state => ({ type, key, options }) => {
     } else {
       set = selectFullSetItems(state)({ type, key, options })
     }
-    console.log({ type, key, options, set })
     if (!set) { return [] }
     return set.map(({ type, id }) => data.find(item => item.type === type && item.id === id))
   }
