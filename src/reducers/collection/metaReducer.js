@@ -5,7 +5,7 @@ import {
   COLLECTION_BEGIN_LOADING_ITEMS,
   COLLECTION_END_LOADING_ITEMS
 } from '../../constants/collection'
-import { selectKey } from '../../selectors/action'
+import { selectType, selectKey } from '../../selectors/action'
 import setsReducer from './setsReducer'
 
 const reducers = {
@@ -43,5 +43,10 @@ const metaReducer = handleActions({
 
 export default (type, key) => (state = {}, action) => {
   if (!action) { return state }
+
+  const collectionType = selectType(action)
+
+  // bail if collection type is wrong
+  if (!collectionType || collectionType !== type) { return state }
   return metaReducer(state, action)
 }

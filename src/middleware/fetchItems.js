@@ -1,9 +1,11 @@
 import { put, call } from 'redux-saga/effects'
 import { beginLoadingItems, endLoadingItems, loadItems, loadIncludedItems } from '../actions/collection'
 import { selectType, selectKey, selectOptions } from '../selectors/action'
-import { fetchAction } from './'
+import { getFetchActionFunc } from './'
 
 const fetchItems = function * (action) {
+  const fetchAction = getFetchActionFunc()
+  if (fetchAction === undefined) { return }
   const type = selectType(action)
   if (!type) { return }
   const key = selectKey(action)

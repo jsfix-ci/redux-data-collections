@@ -1,10 +1,12 @@
-export const selectPayload = action => action.payload || {}
-export const selectMeta = action => action.meta || {}
+import get from 'lodash.get'
 
-export const selectType = action => selectMeta(action).type
-export const selectId = action => selectMeta(action).id
-export const selectData = action => selectPayload(action).data
-export const selectOptions = action => selectPayload(action).options
-export const selectKey = action => selectPayload(action).key
-export const selectValue = action => selectPayload(action).value
-export const selectFunc = action => selectPayload(action).func
+export const selectPayload = action => action.payload
+export const selectMeta = action => action.meta
+
+export const selectType = action => get(selectMeta(action), 'type')
+export const selectId = action => get(selectMeta(action), 'id')
+export const selectData = action => get(selectPayload(action), 'data')
+export const selectOptions = action => get(selectPayload(action), 'options')
+export const selectKey = action => get(selectPayload(action), 'key')
+export const selectValue = action => get(selectPayload(action), 'value')
+export const selectFunc = action => get(selectPayload(action), 'func')

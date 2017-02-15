@@ -1,8 +1,6 @@
-import { selectValueByKey, selectData, selectMeta, selectId, selectType } from './'
+import { selectValueByKey, selectData, selectMeta } from './'
 import { selectItems } from './collection'
 import get from 'lodash.get'
-
-// TODO: move to a more generic location
 
 // payload: { type, id, key, options }
 export const selectItem = (state) => (payload) => {
@@ -53,7 +51,8 @@ export const selectMetaKey = item => key => {
   return get(meta, key)
 }
 
-// ---
+// --- older, may not be as useful
+
 export const selectItemById = (state) => (type, id) => {
   const items = selectItems(state)({ type })
   if (!Array.isArray(items)) { return undefined }
@@ -123,6 +122,7 @@ export const selectItemRelationships = (state) => (type, id) => {
   return selectRelationships(item)
 }
 
+// TODO: mofe to ./relationships
 export const selectRelationships = (item) => {
   return selectValueByKey(item)('relationships')
 }

@@ -3,9 +3,9 @@ import { COLLECTION_FETCH_ITEMS } from '../constants'
 import fetchItems from './fetchItems'
 
 // NOTE: you need to define fetchAction as part of setup: setFetchActionFunc(myCustomFetch)
-let fetchAction = action => undefined
+let fetchAction
 export const setFetchActionFunc = func => { fetchAction = func }
-export { fetchAction }
+export const getFetchActionFunc = () => fetchAction
 
 // TODO: move to its own npm module redux-saga-actions
 export const createWatcher = (actionType, saga) => {
