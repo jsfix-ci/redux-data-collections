@@ -3,7 +3,7 @@ import { selectItems } from './collection'
 import get from 'lodash.get'
 
 // payload: { type, id, key, options }
-export const selectItem = (state) => (payload) => {
+export const selectItem = state => payload => {
   const { type, id, options } = payload
   const items = selectItems(state)(payload)
   if (!Array.isArray(items)) { return undefined }
@@ -15,6 +15,16 @@ export const selectItem = (state) => (payload) => {
     })
   }
   return items.find(item => item.type === type && item.id === id)
+}
+
+// payload: { type, key, value}
+export const selectItemByAttribute = state => payload => {
+  const { type, key, value } = payload
+  const items = selectItems(state)({ type })
+  return items.find(item => {
+    const attribute = selectAttribute(item)(key)
+    return attribute === value
+  })
 }
 
 export const selectItemIsLoading = state => payload => {
