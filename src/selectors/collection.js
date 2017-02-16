@@ -75,8 +75,9 @@ export const selectLastLoadedPageNum = state => ({ type, key, options }) => {
   const collectionMeta = selectCollectionMeta(collection)
   const { sets } = collectionMeta
   if (!sets) { return }
+  key = makeSetKey(key, options)
   const set = sets[key]
-  if (!set) { return }
+  if (!set) { return 0 }
   return Object.keys(set).sort((a, b) => a - b).reverse()[0]
 }
 
