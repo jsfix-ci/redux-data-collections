@@ -1,4 +1,5 @@
 import { selectValueByKey } from './'
+import { makeSetKey } from '../utils/makeSetkey'
 
 // allow for setting the default root selector by type
 const __DEFAULT_ROOT_SELECTOR__ = '@@redux-data/__DEFAULT__'
@@ -39,6 +40,7 @@ export const selectSet = state => ({ type, key, options }) => {
   const meta = selectCollectionMeta(collection)
   const { sets } = meta
   if (!sets) { return }
+  key = makeSetKey(key, options)
   const set = sets[key]
   if (!set) { return }
   let page = '1'
@@ -56,6 +58,7 @@ export const selectFullSetItems = state => ({ type, key, options }) => {
   const meta = selectCollectionMeta(collection)
   const { sets } = meta
   if (!sets) { return }
+  key = makeSetKey(key, options)
   const set = sets[key]
   if (!set) { return }
   const items = Object.keys(set).sort((a, b) => a - b).reduce((list, page) => {
