@@ -85,8 +85,9 @@ export const selectIsLoaded = state => ({ type, key, options }) => {
   let meta
   if (key) {
     // NOTE: selectSet returns by page
-    // TODO: should return collection.meta.sets[key].meta.isLoading <-- sets[key].meta currently doesn't exist
-    // TODO: should return collection.meta.sets[key].data[page].meta.isLoading <-- sets[key].data currently doesn't exist
+    // TODO: should return sets[key].meta.isLoading
+    // TODO: should return sets[key].data[page].meta.isLoading
+    // NOTE: would need to rework how sets are stored to support this
     const set = selectSet(state)({ type, key, options })
     meta = selectValueByKey(set)('meta')
   } else {
