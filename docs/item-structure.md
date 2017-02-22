@@ -13,20 +13,6 @@ state[name].data = [ item ] // <-- a collection is a list of items
 ## Example 1: Standard Item
 Below you can see a standard item. Every item has a type and an ID at minimum.
 
-- `type` is required, should be a valid [member name](http://jsonapi.org/format/1.1/#document-member-names)
-- `id` is required, should be a string, must be unique for the type, consider using a [uuid](https://www.npmjs.com/package/uuid)
-- `attributes` is a key-value object, should be a valid [attributes object](http://jsonapi.org/format/1.1/#document-resource-object-attributes)
-
-  **Example:** `const attributes = { title: 'hello' }`
-- `relationships` should be a valid [relationships object](http://jsonapi.org/format/1.1/#document-resource-object-relationships). Should contain a `data` and a `meta` object. The data is a [resource linkage](#document-resource-object-linkage). The `data` may be a single [resource identity object](http://jsonapi.org/format/1.1/#document-resource-identifier-objects) or an array of resource objects.
-
-  **Example:** `const data = { type: 'person', id: 'person-uuid-1' }`
-
-  **Example:** `const relationships = { author: { data, meta } }`
-- `meta` is a catch all for data "about the item". It is a key value store.
-
-  **Example:** `const meta = { isLoaded: true, isSaved: false }`
-
 ```js
 // an item looks like this:
 const item = {
@@ -37,6 +23,46 @@ const item = {
   meta
 }
 ```
+
+- `type` is required, should be a valid "[member name](http://jsonapi.org/format/1.1/#document-member-names)"
+- `id` is required, should be a string, **must** be unique for the type, consider using a [uuid](https://www.npmjs.com/package/uuid) if possible
+- `attributes` is a key-value object, should be a valid "[attributes object](http://jsonapi.org/format/1.1/#document-resource-object-attributes)"
+
+  **Example:**
+
+  ```js
+  const attributes = { title: 'hello', key: 'value' }
+  ```
+
+- `relationships` should be a valid "[relationships object](http://jsonapi.org/format/1.1/#document-resource-object-relationships)"
+
+  **Example:**
+
+  ```js
+  const authorIdentity = { type: 'person', id: 'person-uuid-1' }
+  const commentIdentities = [
+    { type: 'comment', id: 'comment-uuid-1' },
+    { type: 'comment', id: 'comment-uuid-2' }
+  ]
+  const meta = {}
+
+  const relationships = {
+    author: { data: authorIdentity, meta }
+    comments: { data: commentIdentities, meta}
+  }
+  ```
+
+  - Each relationship should contain a `data` and a `meta` object.
+  - `data` is a "[resource linkage](#document-resource-object-linkage)"
+  - `data` may be a single "[resource identity object](http://jsonapi.org/format/1.1/#document-resource-identifier-objects)" or an array of resource identity objects.
+
+- `meta` is a catch all for data "about the item." It is a key value store.
+
+  **Example:**
+
+  ```js
+  const meta = { isLoaded: true, isSaved: false }
+  ```
 
 ### Full item
 Below you can see a fully fleshed out item object. You can see the structure of relationships is a little more complex than attributes. Relationships describe links to items in other collections.
@@ -58,7 +84,7 @@ const item = {
     comments: {
       data: [
         { type: 'comment', id: 'comment-uuid-1' },
-        { type: 'comment', id: 'comment-uuid-1' }
+        { type: 'comment', id: 'comment-uuid-2' }
       ],
       meta: {}
     }
