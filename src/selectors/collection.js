@@ -7,8 +7,8 @@ const rootSelectorsByType = {
   [__DEFAULT_ROOT_SELECTOR__]: state => type => state[type]
 }
 
-export const setCollectionRootSelector = (type, reducer) => {
-  rootSelectorsByType[type] = reducer
+export const setCollectionRootSelector = (type, selector) => {
+  rootSelectorsByType[type] = selector
 }
 
 export const selectRootOfType = state => type => {
