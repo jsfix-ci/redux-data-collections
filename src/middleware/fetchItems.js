@@ -5,6 +5,7 @@ import { getFetchActionFunc } from './'
 
 const fetchItems = function * (action) {
   const fetchAction = getFetchActionFunc()
+  console.log('fetchAction', fetchAction)
   if (fetchAction === undefined) { return }
   const type = selectType(action)
   if (!type) { return }
