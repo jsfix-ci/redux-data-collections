@@ -32,7 +32,7 @@ Deep inside a typical redux-data saga, fetchAction is called like this:
 const { data, included } = yield call(fetchAction, action)
 ```
 
-- You can review [an example]('./fetchItems.js').
+- You can review [an example](./fetchItems.js).
 - `call` comes from [`redux-saga`](https://redux-saga.github.io/redux-saga/docs/api/index.html#callfn-args)
 - `data` is expected to be the "data" member from a valid JSONAPI [compound document](http://jsonapi.org/format/#document-compound-documents)
 - `included` is expected to be the "included" member from a valid JSONAPI [compound document](http://jsonapi.org/format/#document-compound-documents)
