@@ -2,11 +2,16 @@ import { put, call } from 'redux-saga/effects'
 import { beginLoadingItems, endLoadingItems, loadItems, loadIncludedItems } from '../actions/collection'
 import { selectType, selectKey, selectOptions } from '../selectors/action'
 import { getFetchActionFunc } from './'
+import invariant from 'invariant'
 
 const fetchItems = function * (action) {
   const fetchAction = getFetchActionFunc()
-  console.log('fetchAction', fetchAction)
-  if (fetchAction === undefined) { return }
+  // TODO: add an invariant here
+  if (fetchAction === undefined) {
+    // eslint-disable-next-line max-len
+    invariant(false, 'fetchAction should be defined using createRootSaga(fetchAction). (details at https://github.com/heygrady/redux-data/tree/master/src/middleware/readme.md)')
+    return
+  }
   const type = selectType(action)
   if (!type) { return }
   const key = selectKey(action)
