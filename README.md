@@ -37,12 +37,12 @@ export const createRootReducer = (asyncReducers) => {
 The reducer returned from `redux-data` is designed to handle specific actions. If we need custom actions we can join the collectionReducer form `redux-data` with our custom reducer using `reduceReducers`.
 
 ```js
-import makeCollectionReducer, { reduceReducers } from 'redux-data'
+import createCollectionReducer, { reduceReducers } from 'redux-data'
 import { handleActions } from 'redux-actions'
 import { CUSTOM_ACTION_TYPE } from './constants'
 
 // create a redux-data reducer
-const collectionReducer = makeCollectionReducer('media')
+const collectionReducer = createCollectionReducer('media')
 
 // create your own reducer
 const mediaReducer = handleActions({
@@ -62,7 +62,7 @@ export default reducer
 ```js
 import { connect } from 'react-redux'
 import EditEntity from '../components/EditEntity'
-import { setAttribute } from 'redux-data/lib/actions/itemActions'
+import { setAttribute } from 'redux-data/lib/actions/item'
 
 const mapStateToProps = (state, ownProps) => {
   return {
@@ -92,8 +92,8 @@ export default EditEntityContainer
 ```js
 import { connect } from 'react-redux'
 import EditEntity from '../components/EditEntity'
-import { selectItemAttributes, selectItemAttributeByName } from 'redux-data/lib/selectors/itemSelectors'
-import { setAttribute } from 'redux-data/lib/actions/itemActions'
+import { selectItemAttributes, selectItemAttributeByName } from 'redux-data/lib/selectors/item'
+import { setAttribute } from 'redux-data/lib/actions/item'
 
 const mapStateToProps = (state, ownProps) => {
   return {
@@ -116,7 +116,6 @@ const mapDispatchToProps = (dispatch, ownProps) => {
 }
 
 const EditEntityContainer = connect(mapStateToProps, mapDispatchToProps)(EditEntity)
-
 export default EditEntityContainer
 
 ```
