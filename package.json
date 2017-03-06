@@ -1,8 +1,8 @@
 {
-  "name": "redux-data",
+  "name": "redux-data-collections",
   "version": "0.0.1",
   "description": "Redux actions, reducers and selectors for managing data in JSONAPI format.",
-  "browser": "dist/redux.js",
+  "browser": "dist/redux-data-collections.js",
   "main": "lib/index.js",
   "module": "es/index.js",
   "jsnext:main": "es/index.js",
@@ -25,31 +25,31 @@
     "check:examples": "yarn build:examples && yarn lint:examples && yarn test:examples",
     "build:commonjs": "cross-env BABEL_ENV=commonjs babel src --out-dir lib",
     "build:es": "cross-env BABEL_ENV=es babel src --out-dir es",
-    "build:umd": "cross-env BABEL_ENV=commonjs NODE_ENV=development webpack src/index.js dist/redux-data.js",
-    "build:umd:min": "cross-env BABEL_ENV=commonjs NODE_ENV=production webpack src/index.js dist/redux-data.min.js",
+    "build:umd": "cross-env BABEL_ENV=commonjs NODE_ENV=development webpack src/index.js dist/redux-data-collections.js",
+    "build:umd:min": "cross-env BABEL_ENV=commonjs NODE_ENV=production webpack src/index.js dist/redux-data-collections.min.js",
     "build:examples": "babel-node examples/buildAll.js",
     "build": "yarn build:commonjs && yarn build:es && yarn build:umd && yarn build:umd:min",
     "dev": "watch 'yarn build:commonjs' ./src",
     "prepublish": "yarn clean && yarn check:src && yarn build",
     "docs:clean": "rimraf _book",
     "docs:prepare": "gitbook install",
-    "docs:build": "yarn docs:prepare && gitbook build -g reactjs/redux && cp logo/apple-touch-icon.png _book/gitbook/images/apple-touch-icon-precomposed-152.png && cp logo/favicon.ico _book/gitbook/images",
+    "docs:build": "yarn docs:prepare && gitbook build -g heygrady/redux-data-collections-collections && cp logo/apple-touch-icon.png _book/gitbook/images/apple-touch-icon-precomposed-152.png && cp logo/favicon.ico _book/gitbook/images",
     "docs:watch": "yarn docs:prepare && gitbook serve",
-    "docs:publish": "yarn docs:clean && yarn docs:build && cp CNAME _book && cd _book && git init && git commit --allow-empty -m 'update book' && git checkout -b gh-pages && touch .nojekyll && git add . && git commit -am 'update book' && git push git@github.com:reactjs/redux gh-pages --force",
+    "docs:publish": "yarn docs:clean && yarn docs:build && cp CNAME _book && cd _book && git init && git commit --allow-empty -m 'update book' && git checkout -b gh-pages && touch .nojekyll && git add . && git commit -am 'update book' && git push git@github.com:heygrady/redux-data-collections-collections gh-pages --force",
     "dev:link": "npm link",
     "dev:unlink": "npm unlink"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/heygrady/redux-data.git"
+    "url": "git+https://github.com/heygrady/redux-data-collections.git"
   },
   "keywords": [],
   "author": "Grady Kuhnline <github@heygrady.net> (https://github.com/heygrady)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/heygrady/redux-data/issues"
+    "url": "https://github.com/heygrady/redux-data-collections/issues"
   },
-  "homepage": "https://github.com/heygrady/redux-data#readme",
+  "homepage": "https://github.com/heygrady/redux-data-collections#readme",
   "dependencies": {
     "inflection": "^1.10.0",
     "invariant": "^2.2.2",
@@ -93,7 +93,7 @@
     "watch": "^1.0.1",
     "webpack": "^1.14.0"
   },
-  "npmName": "redux-data",
+  "npmName": "redux-data-collections",
   "npmFileMap": [
     {
       "basePath": "/dist/",

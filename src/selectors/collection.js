@@ -2,7 +2,7 @@ import { selectValueByKey } from './'
 import { makeSetKey } from '../utils/makeSetkey'
 
 // allow for setting the default root selector by type
-const __DEFAULT_ROOT_SELECTOR__ = '@@redux-data/__DEFAULT__'
+const __DEFAULT_ROOT_SELECTOR__ = '@@redux-data-collections/__DEFAULT__'
 const rootSelectorsByType = {
   [__DEFAULT_ROOT_SELECTOR__]: state => type => state[type]
 }
