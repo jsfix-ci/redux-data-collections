@@ -1,4 +1,5 @@
 import { handleActions } from 'redux-actions'
+import get from 'lodash.get'
 import {
   COLLECTION_LOAD_ITEMS,
   COLLECTION_ADD_ITEMS,
@@ -41,7 +42,10 @@ const metaReducer = handleActions({
   }
 }, {})
 
-export default (type, key) => (state = {}, action) => {
+export default (type, options) => (state, action) => {
+  if (state === undefined) {
+    state = get(options, 'meta', {})
+  }
   if (!action) { return state }
 
   const collectionType = selectType(action)

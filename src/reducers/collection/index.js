@@ -1,10 +1,10 @@
 import { combineReducers } from 'redux'
-import dataReducer from './dataReducer'
-import metaReducer from './metaReducer'
+import createDataReducer from './dataReducer'
+import createMetaReducer from './metaReducer'
 
 const collectionReducer = (type, options) => combineReducers({
-  data: dataReducer(type, options),
-  meta: metaReducer(type, options)
+  data: createDataReducer(type, options),
+  meta: createMetaReducer(type, options)
 })
 
 export default collectionReducer
