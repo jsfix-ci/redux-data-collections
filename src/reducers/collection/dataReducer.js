@@ -3,7 +3,8 @@ import reduceReducers from 'reduce-reducers'
 import itemReducer from '../item'
 import {
   ITEM_CREATE_NEW,
-  ITEM_ADD
+  ITEM_ADD,
+  ITEM_LOAD
 } from '../../constants/item'
 import {
   COLLECTION_LOAD_ITEMS,
@@ -60,6 +61,11 @@ const dataReducer = handleActions({
     // TODO: would/should an existing item already be handeled by mapActionToItemReducer?
     if (item) { return state } // <-- already added, bail
     return [...state, itemReducer(item, action)]
+  },
+  [ITEM_LOAD]: (state, action) => {
+    action = { ...action }
+    action.type = ITEM_ADD
+    return dataReducer(state, action)
   },
   [COLLECTION_LOAD_ITEMS]: (state, action) => {
     action = { ...action }

@@ -33,7 +33,7 @@ export const reloadItem = createStandardAction(ITEM_RELOAD)
 export const deleteItem = createStandardAction(ITEM_DELETE)
 
 // meta
-export const beginLodaingItem = createStandardAction(ITEM_BEGIN_LOADING)
+export const beginLoadingItem = createStandardAction(ITEM_BEGIN_LOADING)
 export const endLoadingItem = createStandardAction(ITEM_END_LOADING)
 export const setMetaKey = createStandardAction(ITEM_META_SET)
 export const toggleMetaKey = createStandardAction(ITEM_META_TOGGLE)
