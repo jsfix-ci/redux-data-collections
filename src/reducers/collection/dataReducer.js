@@ -1,4 +1,5 @@
 import { handleActions } from 'redux-actions'
+import get from 'lodash.get'
 import reduceReducers from 'reduce-reducers'
 import itemReducer from '../item'
 import {
@@ -180,7 +181,10 @@ const dataReducer = handleActions({
   }
 }, [])
 
-export default (type, options = {}) => (state = [], action) => {
+export default (type, options = {}) => (state, action) => {
+  if (state === undefined) {
+    state = get(options, 'data', [])
+  }
   if (!action) { return state }
 
   const collectionType = selectType(action)
