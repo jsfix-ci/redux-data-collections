@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux'
 import { handleActions } from 'redux-actions'
 import reduceReducers from 'reduce-reducers'
-import uuid from 'uuid/v4'
+import uuid from '../../utils/uuid'
 import {
   ITEM_CREATE_NEW,
   ITEM_ADD,
