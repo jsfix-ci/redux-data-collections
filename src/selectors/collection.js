@@ -1,10 +1,12 @@
 import { selectValueByKey } from './'
 import { makeSetKey } from '../utils/makeSetkey'
+import { pluralize } from 'inflection'
 
 // allow for setting the default root selector by type
-const __DEFAULT_ROOT_SELECTOR__ = '@@redux-data-collections/__DEFAULT__'
-const rootSelectorsByType = {
-  [__DEFAULT_ROOT_SELECTOR__]: state => type => state[type]
+// TODO: this doesn't work as expected
+export const __DEFAULT_ROOT_SELECTOR__ = '@@redux-data-collections/__DEFAULT__'
+export const rootSelectorsByType = {
+  [__DEFAULT_ROOT_SELECTOR__]: state => type => state[type] || state[pluralize(type)]
 }
 
 export const setCollectionRootSelector = (type, selector) => {
@@ -16,7 +18,7 @@ export const selectRootOfType = state => type => {
   if (!selector) {
     return rootSelectorsByType[__DEFAULT_ROOT_SELECTOR__](state)(type)
   }
-  return selector(state)
+  return selector(state)(type)
 }
 
 export const selectItems = state => ({ type, key, options }) => {
