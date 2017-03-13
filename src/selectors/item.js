@@ -1,4 +1,4 @@
-import { selectValueByKey, selectData, selectMeta } from './'
+import { selectData, selectMeta } from './'
 import { selectItems } from './collection'
 import get from 'lodash.get'
 
@@ -30,13 +30,13 @@ export const selectItemByAttribute = state => payload => {
 export const selectItemIsLoading = state => payload => {
   const item = selectItem(state)(payload)
   const meta = selectMeta(item)
-  return selectValueByKey(meta)('isLoading')
+  return get(meta, 'isLoading')
 }
 
 export const selectItemIsLoaded = state => payload => {
   const item = selectItem(state)(payload)
   const meta = selectMeta(item)
-  return selectValueByKey(meta)('IsLoaded')
+  return get(meta, 'IsLoaded')
 }
 
 export const selectItemAttribute = state => payload => {
@@ -74,7 +74,7 @@ export const selectRawItemAttributes = (state) => (type, id) => {
   return selectRawAttributes(item)
 }
 
-export const selectRawAttributes = (item) => selectValueByKey(item)('attributes')
+export const selectRawAttributes = (item) => get(item, 'attributes')
 
 export const selectItemChangedAttributes = (state) => (type, id) => {
   const item = selectItemById(state)(type, id)
@@ -83,7 +83,7 @@ export const selectItemChangedAttributes = (state) => (type, id) => {
 
 export const selectChangedAttributes = (item) => {
   const meta = selectMeta(item)
-  return selectValueByKey(meta)('changedAttributes')
+  return get(meta, 'changedAttributes')
 }
 
 export const selectItemAttributes = (state) => (type, id) => {
@@ -104,7 +104,7 @@ export const selectItemAttributeByName = (state) => (type, id, name) => {
 
 export const selectAttributeByName = (item) => (name) => {
   const attributes = selectAttributes(item)
-  return selectValueByKey(attributes)(name)
+  return get(attributes, name)
 }
 
 export const selectItemRawAttributeByName = (state) => (type, id, name) => {
@@ -114,7 +114,7 @@ export const selectItemRawAttributeByName = (state) => (type, id, name) => {
 
 export const selectRawAttributeByName = (item) => (name) => {
   const attributes = selectRawAttributes(item)
-  return selectValueByKey(attributes)(name)
+  return get(attributes, name)
 }
 
 export const selectItemChangedAttributeByName = (state) => (type, id, name) => {
@@ -124,7 +124,7 @@ export const selectItemChangedAttributeByName = (state) => (type, id, name) => {
 
 export const selectChangedAttributeByName = (item) => (name) => {
   const attributes = selectChangedAttributes(item)
-  return selectValueByKey(attributes)(name)
+  return get(attributes, name)
 }
 
 export const selectItemRelationships = (state) => (type, id) => {
@@ -132,9 +132,15 @@ export const selectItemRelationships = (state) => (type, id) => {
   return selectRelationships(item)
 }
 
-// TODO: mofe to ./relationships
+// TODO: move to ./relationships
 export const selectRelationships = (item) => {
-  return selectValueByKey(item)('relationships')
+  return get(item, 'relationships')
+}
+
+export const selectRelatedItems = state => (item, name) => {
+  const relationships = selectRelationships(item)
+  const identifiers = selectRelationshipDataByName(relationships)(name)
+  return identifiers.map(identifier => selectItem(state)(identifier))
 }
 
 export const selectItemRelationshipByName = (state) => (type, id, name) => {
@@ -142,7 +148,7 @@ export const selectItemRelationshipByName = (state) => (type, id, name) => {
   return selectRelationshipByName(relationships)(name)
 }
 
-export const selectRelationshipByName = (relationships) => (name) => selectValueByKey(relationships)(name)
+export const selectRelationshipByName = (relationships) => (name) => get(relationships, name)
 
 export const selectRelationshipDataByName = (relationships) => (name) => {
   const relationship = selectRelationshipByName(relationships)(name)
@@ -162,7 +168,7 @@ export const selectRelationshipChangeDataByName = (relationships) => (name) => {
 export const selectRelationshipData = (relationship) => {
   const data = selectData(relationship)
   const meta = selectMeta(relationship)
-  const changedData = selectValueByKey(meta)('changedData')
+  const changedData = get(meta, 'changedData')
   return changedData || data
 }
 
@@ -170,5 +176,5 @@ export const selectRelationshipRawData = (relationship) => selectData(relationsh
 
 export const selectRelationshipChangedData = (relationship) => {
   const meta = selectMeta(relationship)
-  return selectValueByKey(meta)('changedData')
+  return get(meta, 'changedData')
 }
