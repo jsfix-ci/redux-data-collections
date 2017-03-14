@@ -1,9 +1,17 @@
-import { selectData, selectMeta } from './'
 import { selectItems } from './collection'
 import get from 'lodash.get'
 
 // payload: { type, id, key, options }
 export const selectItem = state => payload => {
+  const item = selectRawItem(state)(payload)
+  if (!item) { return }
+  return {
+    ...item,
+    attributes: selectAttributes(item),
+    relationships: selectRelationships(item)
+  }
+}
+export const selectRawItem = state => payload => {
   const { type, id, options } = payload
   const items = selectItems(state)(payload)
   if (!Array.isArray(items)) { return undefined }
@@ -29,13 +37,13 @@ export const selectItemByAttribute = state => payload => {
 
 export const selectItemIsLoading = state => payload => {
   const item = selectItem(state)(payload)
-  const meta = selectMeta(item)
+  const meta = get(item, 'meta')
   return get(meta, 'isLoading')
 }
 
 export const selectItemIsLoaded = state => payload => {
   const item = selectItem(state)(payload)
-  const meta = selectMeta(item)
+  const meta = get(item, 'meta')
   return get(meta, 'IsLoaded')
 }
 
@@ -53,87 +61,95 @@ export const selectAttribute = item => key => {
 export const selectItemMetaKey = state => payload => {
   const item = selectItem(state)(payload)
   const { key } = payload
-  return selectMetaKey(item)(key)
+  return selectMetaKey(item)(key, 'meta')
 }
 
 export const selectMetaKey = item => key => {
-  const meta = selectMeta(item)
+  const meta = get(item, 'meta')
   return get(meta, key)
 }
 
 // --- older, may not be as useful
 
-export const selectItemById = (state) => (type, id) => {
+export const selectItemById = state => (type, id) => {
   const items = selectItems(state)({ type })
   if (!Array.isArray(items)) { return undefined }
   return items.find(item => item.type === type && item.id === id)
 }
 
-export const selectRawItemAttributes = (state) => (type, id) => {
+export const selectRawItemAttributes = state => (type, id) => {
   const item = selectItemById(state)(type, id)
   return selectRawAttributes(item)
 }
 
-export const selectRawAttributes = (item) => get(item, 'attributes')
+export const selectRawAttributes = item => get(item, 'attributes')
 
-export const selectItemChangedAttributes = (state) => (type, id) => {
+export const selectItemChangedAttributes = state => (type, id) => {
   const item = selectItemById(state)(type, id)
   return selectChangedAttributes(item)
 }
 
-export const selectChangedAttributes = (item) => {
-  const meta = selectMeta(item)
+export const selectChangedAttributes = item => {
+  const meta = get(item, 'meta')
   return get(meta, 'changedAttributes')
 }
 
-export const selectItemAttributes = (state) => (type, id) => {
+export const selectItemAttributes = state => (type, id) => {
   const item = selectItemById(state)(type, id)
   return selectAttributes(item)
 }
 
-export const selectAttributes = (item) => {
+export const selectAttributes = item => {
   const rawAttributes = selectRawAttributes(item)
   const changedAttributes = selectChangedAttributes(item)
   return { ...rawAttributes, ...changedAttributes }
 }
 
-export const selectItemAttributeByName = (state) => (type, id, name) => {
+export const selectItemAttributeByName = state => (type, id, name) => {
   const item = selectItemById(state)(type, id)
   return selectAttributeByName(item)(name)
 }
 
-export const selectAttributeByName = (item) => (name) => {
+export const selectAttributeByName = item => (name) => {
   const attributes = selectAttributes(item)
   return get(attributes, name)
 }
 
-export const selectItemRawAttributeByName = (state) => (type, id, name) => {
+export const selectItemRawAttributeByName = state => (type, id, name) => {
   const item = selectItemById(state)(type, id)
   return selectRawAttributeByName(item)(name)
 }
 
-export const selectRawAttributeByName = (item) => (name) => {
+export const selectRawAttributeByName = item => (name) => {
   const attributes = selectRawAttributes(item)
   return get(attributes, name)
 }
 
-export const selectItemChangedAttributeByName = (state) => (type, id, name) => {
+export const selectItemChangedAttributeByName = state => (type, id, name) => {
   const item = selectItemById(state)(type, id)
   return selectChangedAttributeByName(item)(name)
 }
 
-export const selectChangedAttributeByName = (item) => (name) => {
+export const selectChangedAttributeByName = item => (name) => {
   const attributes = selectChangedAttributes(item)
   return get(attributes, name)
 }
 
-export const selectItemRelationships = (state) => (type, id) => {
+export const selectItemRelationships = state => (type, id) => {
   const item = selectItemById(state)(type, id)
   return selectRelationships(item)
 }
 
 // TODO: move to ./relationships
-export const selectRelationships = (item) => {
+export const selectRelationships = item => {
+  const relationships = selectRawRelationships(item)
+  return relationships && Object.keys(relationships).reduce((obj, key) => {
+    const relationship = relationships[key]
+    obj[key] = { ...relationship, data: selectRelationshipData(relationship) }
+    return obj
+  }, {})
+}
+export const selectRawRelationships = item => {
   return get(item, 'relationships')
 }
 
@@ -143,38 +159,38 @@ export const selectRelatedItems = state => (item, name) => {
   return identifiers && identifiers.map(identifier => selectItem(state)(identifier))
 }
 
-export const selectItemRelationshipByName = (state) => (type, id, name) => {
+export const selectItemRelationshipByName = state => (type, id, name) => {
   const relationships = selectItemRelationships(state)(type, id)
   return selectRelationshipByName(relationships)(name)
 }
 
-export const selectRelationshipByName = (relationships) => (name) => get(relationships, name)
+export const selectRelationshipByName = relationships => (name) => get(relationships, name)
 
-export const selectRelationshipDataByName = (relationships) => (name) => {
+export const selectRelationshipDataByName = relationships => (name) => {
   const relationship = selectRelationshipByName(relationships)(name)
   return selectRelationshipData(relationship)
 }
 
-export const selectRelationshipRawDataByName = (relationships) => (name) => {
+export const selectRelationshipRawDataByName = relationships => (name) => {
   const relationship = selectRelationshipByName(relationships)(name)
   return selectRelationshipRawData(relationship)
 }
 
-export const selectRelationshipChangeDataByName = (relationships) => (name) => {
+export const selectRelationshipChangeDataByName = relationships => (name) => {
   const relationship = selectRelationshipByName(relationships)(name)
   return selectRelationshipChangedData(relationship)
 }
 
-export const selectRelationshipData = (relationship) => {
-  const data = selectData(relationship)
-  const meta = selectMeta(relationship)
+export const selectRelationshipData = relationship => {
+  const data = get(relationship, 'data')
+  const meta = get(relationship, 'meta')
   const changedData = get(meta, 'changedData')
   return changedData || data
 }
 
-export const selectRelationshipRawData = (relationship) => selectData(relationship)
+export const selectRelationshipRawData = relationship => get(relationship, 'data')
 
-export const selectRelationshipChangedData = (relationship) => {
-  const meta = selectMeta(relationship)
+export const selectRelationshipChangedData = relationship => {
+  const meta = get(relationship, 'meta')
   return get(meta, 'changedData')
 }
