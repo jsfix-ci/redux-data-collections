@@ -18,7 +18,8 @@ const createRelationshipReducer = config => {
       meta: {
         ...action.meta,
         relationshipData: state.data, // for changedData
-        changedData: get(state, 'meta.changedData') // for save
+        changedData: get(state, 'meta.changedData'), // for save
+        isDeleted: get(state, 'meta.isDeleted') // for save
       }
     }
     return reducer(state, newAction)
