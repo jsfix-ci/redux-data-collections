@@ -139,8 +139,8 @@ export const selectRelationships = (item) => {
 
 export const selectRelatedItems = state => (item, name) => {
   const relationships = selectRelationships(item)
-  const identifiers = selectRelationshipDataByName(relationships)(name)
-  return identifiers.map(identifier => selectItem(state)(identifier))
+  const identifiers = relationships && selectRelationshipDataByName(relationships)(name)
+  return identifiers && identifiers.map(identifier => selectItem(state)(identifier))
 }
 
 export const selectItemRelationshipByName = (state) => (type, id, name) => {
