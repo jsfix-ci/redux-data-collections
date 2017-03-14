@@ -6,8 +6,8 @@ const PLACEHOLDER = state => state
 export const oneReducer = ({ key, isOne, accepts }) => handleActions({
   [ITEM_COMMIT]: (state, action) => {
     const { meta } = action
-    const { changedData } = meta
-    return changedData || state
+    const { changedData, isDeleted } = meta
+    return isDeleted ? [] : changedData || state
   },
   PLACEHOLDER
 }, {})
@@ -16,8 +16,8 @@ export const oneReducer = ({ key, isOne, accepts }) => handleActions({
 export const manyReducer = ({ key, isOne, accepts }) => handleActions({
   [ITEM_COMMIT]: (state, action) => {
     const { meta } = action
-    const { changedData } = meta
-    return changedData || state
+    const { changedData, isDeleted } = meta
+    return isDeleted ? [] : changedData || state
   },
   PLACEHOLDER
 }, [])
