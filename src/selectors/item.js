@@ -183,9 +183,9 @@ export const selectRelationshipChangeDataByName = relationships => (name) => {
 
 export const selectRelationshipData = relationship => {
   const data = get(relationship, 'data')
-  const meta = get(relationship, 'meta')
-  const changedData = get(meta, 'changedData')
-  return changedData || data
+  const changedData = get(relationship, 'meta.changedData')
+  const isDeleted = get(relationship, 'meta.isDeleted')
+  return isDeleted ? [] : changedData || data
 }
 
 export const selectRelationshipRawData = relationship => get(relationship, 'data')

@@ -60,8 +60,9 @@ const relationshipMetaReducer = (config) => {
       },
       [RELATIONSHIP_MANY_DELETE]: (state, action) => {
         if (isOne) { return state }
-        // TODO: this doesn't make sense for a many relationship
-        return { ...state, isDeleted: true }
+        const { changedData } = state
+        const isDeleted = changedData === null || Array.isArray(changedData) && !changedData.length
+        return { ...state, isDeleted }
       },
       [ITEM_COMMIT]: (state, action) => {
         // @see RELATIONSHIP_RESET
@@ -74,12 +75,13 @@ const relationshipMetaReducer = (config) => {
     (state, action) => {
       // cleanup empty attributes, etc
       const { changedData, isDeleted } = state
+      const hasChangedData = !(changedData === null || Array.isArray(changedData) && !changedData.length)
       let newState
-      if (changedData === null || Array.isArray(state.changedData) && !state.changedData.length) {
+      if (!hasChangedData) {
         newState = { ...state }
         newState = deleteKey(newState, 'changedData')
       }
-      if (isDeleted === false) {
+      if (isDeleted === false || isDeleted === true && hasChangedData) {
         newState = newState || { ...state }
         newState = deleteKey(newState, 'isDeleted')
       }
