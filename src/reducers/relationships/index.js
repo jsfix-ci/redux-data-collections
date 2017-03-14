@@ -2,7 +2,7 @@ import { combineReducers } from 'redux'
 import relationshipReducer from './relationshipReducer'
 
 // NOTE: relationships = { comments: { isOne = false, accepts = ['comment'] } }
-const relationshipsReducer = (options = {}) => (state = {}, action) => {
+const createRelationshipsReducer = (options = {}) => (state = {}, action) => {
   const { relationships } = options
   if (!relationships) { return state } // TODO: shoudn't completely bail on missing relationships config
   const keys = Object.keys(relationships)
@@ -18,4 +18,4 @@ const relationshipsReducer = (options = {}) => (state = {}, action) => {
   // TODO: combineReducers throws invariant errors
   return combineReducers(reducers)(state, action)
 }
-export default relationshipsReducer
+export default createRelationshipsReducer

@@ -12,7 +12,7 @@ import {
   ITEM_ATTRIBUTES_ROLLBACK,
   ITEM_ATTRIBUTE_TOGGLE
 } from '../../constants/attributes'
-import { selectType, selectId, selectData, selectKey, selectOptions } from '../../selectors/action'
+import { selectType, selectId, selectData, selectKey, selectMeta } from '../../selectors/action'
 import createAttributesReducer from '../attributes'
 import createRelationshipsReducer from '../relationships'
 import metaReducer from './metaReducer'
@@ -106,9 +106,10 @@ const skipActions = (constants = []) => reducer => (state, action) => {
   return state
 }
 
-export default (state, action) => {
+export default (state = {}, action) => {
   const type = selectType(action)
-  const options = selectOptions(action)
+  const actionMeta = selectMeta(action)
+  const options = get(actionMeta, 'options')
   if (!type) { return state }
   return reduceReducers(
     itemReducer,
