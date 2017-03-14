@@ -67,7 +67,7 @@ const deletedAttributesReducer = handleActions({
 
 const itemMetaReducer = handleActions({
   [ITEM_COMMIT]: (state, action) => {
-    const newState = { ...state, isSaved: true }
+    const newState = { ...state, isSaved: false }
     delete newState.changedAttributes
     delete newState.deletedAttributes
     return newState
@@ -181,7 +181,9 @@ const itemMetaReducer = handleActions({
     return { ...state, isSaving: true }
   },
   [ITEM_END_SAVING]: (state, action) => {
-    return { ...state, isSaving: false }
+    const newState = { ...state, isSaving: false, isSaved: true }
+    if (newState.hasOwnProperty('isNew')) { delete newState.isNew }
+    return newState
   }
 }, {})
 
