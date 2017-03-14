@@ -1,6 +1,10 @@
 import { handleActions } from 'redux-actions'
 import {
-  ITEM_SAVE,
+  ITEM_COMMIT,
+  ITEM_BEGIN_LOADING,
+  ITEM_END_LOADING,
+  ITEM_BEGIN_SAVING,
+  ITEM_END_SAVING,
 
   ITEM_META_SET,
   ITEM_META_TOGGLE,
@@ -62,12 +66,13 @@ const deletedAttributesReducer = handleActions({
 }, [])
 
 const itemMetaReducer = handleActions({
-  [ITEM_SAVE]: (state, action) => {
+  [ITEM_COMMIT]: (state, action) => {
     const newState = { ...state, isSaved: true }
     delete newState.changedAttributes
     delete newState.deletedAttributes
     return newState
   },
+
   [ITEM_ATTRIBUTES_SET_OBJECT]: (state, action) => {
     const data = selectData(action)
     const { changedAttributes } = state
@@ -165,6 +170,18 @@ const itemMetaReducer = handleActions({
     const newState = { ...state }
     delete newState[key]
     return newState
+  },
+  [ITEM_BEGIN_LOADING]: (state, action) => {
+    return { ...state, isSaving: true }
+  },
+  [ITEM_END_LOADING]: (state, action) => {
+    return { ...state, isSaving: false }
+  },
+  [ITEM_BEGIN_SAVING]: (state, action) => {
+    return { ...state, isSaving: true }
+  },
+  [ITEM_END_SAVING]: (state, action) => {
+    return { ...state, isSaving: false }
   }
 }, {})
 

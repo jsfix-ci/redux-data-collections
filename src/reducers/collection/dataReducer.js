@@ -57,9 +57,8 @@ const dataReducer = handleActions({
     const type = selectType(action)
     const id = selectId(action)
     const item = state.find(i => i.type === type && i.id === id)
-    // TODO: shouldn't we update instead of bailing?
-    // TODO: use immutable splice to update
-    // TODO: would/should an existing item already be handeled by mapActionToItemReducer?
+    // NOTE: existing item already be handeled by mapActionToItemReducer?
+    // @see itemReducer for existing items
     if (item) { return state } // <-- already added, bail
     return [...state, itemReducer(item, action)]
   },

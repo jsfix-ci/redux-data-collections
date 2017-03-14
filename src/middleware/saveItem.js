@@ -1,11 +1,12 @@
-import { put, call } from 'redux-saga/effects'
-import { beginLoadingItem, endLoadingItem, loadItem } from '../actions/item'
+import { put, call, select } from 'redux-saga/effects'
+import { commitItem, beginSavingItem, endSavingItem, loadItem } from '../actions/item'
 import { loadIncludedItems } from '../actions/collection'
 import { selectType, selectId, selectOptions } from '../selectors/action'
+import { selectItem } from '../selectors/item'
 import { getFetchActionFunc } from './'
 import invariant from 'invariant'
 
-const fetchItem = function * (action) {
+const saveItem = function * (action) {
   const fetchAction = getFetchActionFunc()
   if (fetchAction === undefined) {
     // eslint-disable-next-line max-len
@@ -16,25 +17,26 @@ const fetchItem = function * (action) {
   const id = selectId(action)
   if (!type || !id) {
     // eslint-disable-next-line max-len
-    invariant(false, 'fetchItem should define a type and id, like fetchItem({ type: \'post\', id: \'some_id\' }). If you\'re trying to search, use fetchItems instead')
+    invariant(false, 'saveItem should define a type and id, like saveItem({ type: \'post\', id: \'some_id\' })')
     return
   }
   const options = selectOptions(action)
   try {
-    yield put(beginLoadingItem({ type, id, options }))
-    const { data, included } = yield call(fetchAction, action)
+    yield put(beginSavingItem({ type, id, options }))
+    const item = yield select(state => selectItem(state)({ type, id }))
+    const newAction = { ...action, payload: { ...action.payload, data: item } }
+    const { data, included } = yield call(fetchAction, newAction)
+    console.log('saved', data, included)
+    // TODO: only commit if save was successful
+    yield put(commitItem({ type, id, options }))
     if (included) {
       yield put(loadIncludedItems({ data: included }))
     }
-    if (Array.isArray(data)) {
-      // eslint-disable-next-line max-len
-      invariant(false, 'fetchItem recieved an array from fetchAction. Expected a single item. Either return a single item or use fetchItems to fetch an array.')
-    }
     yield put(loadItem({ type, id, data, options }))
-    yield put(endLoadingItem({ type, id, options }))
+    yield put(endSavingItem({ type, id, options }))
   } catch (error) {
     console.log(error)
   }
 }
 
-export default fetchItem
+export default saveItem

@@ -1,7 +1,7 @@
 import itemReducer from 'reducers/item'
 import {
   // createNew,
-  saveItem
+  commitItem
   // reload,
   // deleteItem,
   // destroyItem
@@ -38,7 +38,7 @@ describe('Reducers', () => {
       expect(state).toEqual(expectedState)
     })
 
-    it('saveItem', () => {
+    it('commitItem', () => {
       const initialState = makePost({
         attributes: { name: 'Original value' },
         meta: {
@@ -53,7 +53,7 @@ describe('Reducers', () => {
       }
 
       const payload = { type: 'post', id: initialState.id }
-      const action = saveItem(payload)
+      const action = commitItem(payload)
       const state = itemReducer(initialState, action)
       expect(state).toEqual(expectedState)
     })

@@ -1,8 +1,17 @@
 import { handleActions } from 'redux-actions'
 import {
+  // RELATIONSHIP_RESET,
+
+  // one
   RELATIONSHIP_ONE_SET,
   RELATIONSHIP_ONE_DELETE,
+
+  // many
+  // RELATIONSHIP_MANY_SET,
+  RELATIONSHIP_MANY_ADD,
   RELATIONSHIP_MANY_DELETE,
+
+  // advanced
   RELATIONSHIP_MANY_CONCAT,
   RELATIONSHIP_MANY_FILTER,
   RELATIONSHIP_MANY_MAP,
@@ -15,9 +24,11 @@ import {
 } from '../../constants/relationships'
 import invariant from 'invariant'
 
-const either = (state, data) => state.length && state || data
+export const either = (state, data) => state.length && state || data
 
+// TODO: rename to createChangedDataReducer
 const changedDataReducer = ({ isOne = false, accepts }) => {
+  // validate the action
   const isValid = (state, action) => {
     const { payload } = action
     if (!payload) {
@@ -31,6 +42,8 @@ const changedDataReducer = ({ isOne = false, accepts }) => {
     }
     return true
   }
+
+  // validate the item
   const canAccept = (item) => {
     if (!accepts) { return true }
     let isAccepted = true
@@ -47,7 +60,9 @@ const changedDataReducer = ({ isOne = false, accepts }) => {
     }
     return isAccepted
   }
+
   return handleActions({
+    // one
     [RELATIONSHIP_ONE_SET]: (state, action) => {
       if (!isOne || !isValid(state, action)) { return state }
       const { payload } = action
@@ -59,10 +74,49 @@ const changedDataReducer = ({ isOne = false, accepts }) => {
       if (!isOne || !isValid(state, action)) { return state }
       return null
     },
+
+    // many
+    [RELATIONSHIP_MANY_ADD]: (state, action) => {
+      if (isOne || !isValid(state, action)) { return state }
+      const { payload, meta } = action
+      const { data } = payload
+      const { relationshipData } = meta
+      if (!canAccept(data)) { return state }
+
+      const newState = [...either(state, relationshipData)]
+
+      // bail if already added
+      if (newState.some(({ id, type }) => id === data.id && type === data.type)) {
+        return newState
+      }
+      return [ ...newState, { type: data.type, id: data.id, meta: data.meta } ]
+    },
+
     [RELATIONSHIP_MANY_DELETE]: (state, action) => {
       if (isOne || !isValid(state, action)) { return state }
-      return []
+      const { payload, meta } = action
+      const { data } = payload
+      const { relationshipData } = meta
+      if (data && !canAccept(data)) { return state }
+
+      // @see RELATIONSHIP_MANY_SPLICE
+      const newState = [...either(state, relationshipData)]
+      const deleteItem = ({ type, id }) => {
+        const index = newState.findIndex(identifier => identifier.type === type && identifier.id === id)
+        newState.splice(index, 1)
+      }
+      if (Array.isArray(data)) {
+        data.map(item => deleteItem(item))
+      } else if (data) {
+        deleteItem(data)
+      } else {
+        // TODO: remove legacy functionality
+        return []
+      }
+      return newState
     },
+
+    // advanced
     [RELATIONSHIP_MANY_CONCAT]: (state, action) => {
       if (isOne || !isValid(state, action)) { return state }
       const { payload, meta } = action
@@ -118,7 +172,7 @@ const changedDataReducer = ({ isOne = false, accepts }) => {
       const { payload, meta } = action
       const { func } = payload
       const { relationshipData } = meta
-      return [...(state.length && state || relationshipData)].sort(func)
+      return [...either(state, relationshipData)].sort(func)
     },
     [RELATIONSHIP_MANY_SPLICE]: (state, action) => {
       if (isOne || !isValid(state, action)) { return state }
@@ -126,7 +180,7 @@ const changedDataReducer = ({ isOne = false, accepts }) => {
       const { options, data } = payload
       const { start, deleteCount } = options || {}
       const { relationshipData } = meta
-      const newState = [...(state.length && state || relationshipData)]
+      const newState = [...either(state, relationshipData)]
       if (data && !canAccept(data)) { return state }
       if (!Array.isArray(data)) {
         newState.splice(start, deleteCount, data)
@@ -140,7 +194,7 @@ const changedDataReducer = ({ isOne = false, accepts }) => {
       const { payload, meta } = action
       const { data } = payload
       const { relationshipData } = meta
-      const newState = [...(state.length && state || relationshipData)]
+      const newState = [...either(state, relationshipData)]
       if (!canAccept(data)) { return state }
       if (!Array.isArray(data)) {
         newState.unshift(data)

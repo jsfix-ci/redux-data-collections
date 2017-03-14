@@ -4,9 +4,21 @@ import reduceReducers from 'reduce-reducers'
 
 import {
   RELATIONSHIP_RESET,
+
+  // one
   // RELATIONSHIP_ONE_SET,
   RELATIONSHIP_ONE_DELETE,
+
+  // many
+  // RELATIONSHIP_MANY_SET,
+  // RELATIONSHIP_MANY_ADD,
   RELATIONSHIP_MANY_DELETE
+
+  // middleware
+  // RELATIONSHIP_ONE_FETCH,
+  // RELATIONSHIP_MANY_FETCH,
+
+  // advanced
   // RELATIONSHIP_MANY_CONCAT,
   // RELATIONSHIP_MANY_FILTER,
   // RELATIONSHIP_MANY_MAP,
@@ -17,16 +29,14 @@ import {
   // RELATIONSHIP_MANY_SPLICE,
   // RELATIONSHIP_MANY_UNSHIFT
 } from '../../constants/relationships'
-
+import { ITEM_COMMIT } from '../../constants/item'
 import changedDataReducer from './changedDataReducer'
 
 const deleteKey = (state = {}, key) => {
-  if (state[key] !== undefined) {
-    const newState = { ...state }
-    delete newState[key]
-    return newState
-  }
-  return state
+  if (state[key] === undefined) { return state }
+  const newState = { ...state }
+  delete newState[key]
+  return newState
 }
 
 const relationshipMetaReducer = (config) => {
@@ -50,7 +60,15 @@ const relationshipMetaReducer = (config) => {
       },
       [RELATIONSHIP_MANY_DELETE]: (state, action) => {
         if (isOne) { return state }
+        // TODO: this doesn't make sense for a many relationship
         return { ...state, isDeleted: true }
+      },
+      [ITEM_COMMIT]: (state, action) => {
+        // @see RELATIONSHIP_RESET
+        let newState = { ...state }
+        newState = deleteKey(newState, 'changedData')
+        newState = deleteKey(newState, 'isDeleted')
+        return newState
       }
     }, {}),
     (state, action) => {

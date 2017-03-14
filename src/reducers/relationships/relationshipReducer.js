@@ -1,11 +1,12 @@
 import { combineReducers } from 'redux'
-import dataReducer from './dataReducer'
-import metaReducer from './metaReducer'
+import createDataReducer from './dataReducer'
+import createMetaReducer from './metaReducer'
+import get from 'lodash.get'
 
-const relationshipReducer = config => {
+const createRelationshipReducer = config => {
   const reducer = combineReducers({
-    data: dataReducer(config),
-    meta: metaReducer(config)
+    data: createDataReducer(config),
+    meta: createMetaReducer(config)
   })
 
   return (state = {}, action) => {
@@ -16,11 +17,12 @@ const relationshipReducer = config => {
       ...action,
       meta: {
         ...action.meta,
-        relationshipData: state.data
+        relationshipData: state.data, // for changedData
+        changedData: get(state, 'meta.changedData') // for save
       }
     }
     return reducer(state, newAction)
   }
 }
 
-export default relationshipReducer
+export default createRelationshipReducer
