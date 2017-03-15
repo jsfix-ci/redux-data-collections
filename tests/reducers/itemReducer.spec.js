@@ -49,7 +49,7 @@ describe('Reducers', () => {
       const expectedState = {
         ...initialState,
         attributes: { name: 'New Value' },
-        meta: { isSaved: true }
+        meta: { isSaved: false }
       }
 
       const payload = { type: 'post', id: initialState.id }

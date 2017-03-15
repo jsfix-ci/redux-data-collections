@@ -25,13 +25,21 @@ export const selectRawItem = state => payload => {
   return items.find(item => item.type === type && item.id === id)
 }
 
-// payload: { type, key, value}
 export const selectItemByAttribute = state => payload => {
   const { type, key, value } = payload
   const items = selectItems(state)({ type })
   return items.find(item => {
     const attribute = selectAttribute(item)(key)
     return attribute === value
+  })
+}
+
+export const selectItemByMetaKey = state => payload => {
+  const { type, key, value } = payload
+  const items = selectItems(state)({ type })
+  return items.find(item => {
+    const metaValue = selectMetaKey(item)(key)
+    return metaValue === value
   })
 }
 
@@ -61,7 +69,7 @@ export const selectAttribute = item => key => {
 export const selectItemMetaKey = state => payload => {
   const item = selectItem(state)(payload)
   const { key } = payload
-  return selectMetaKey(item)(key, 'meta')
+  return selectMetaKey(item)(key)
 }
 
 export const selectMetaKey = item => key => {
@@ -153,9 +161,14 @@ export const selectRawRelationships = item => {
   return get(item, 'relationships')
 }
 
-export const selectRelatedItems = state => (item, name) => {
+export const selectRelatedIdentifiers = item => name => {
   const relationships = selectRelationships(item)
   const identifiers = relationships && selectRelationshipDataByName(relationships)(name)
+  return identifiers
+}
+
+export const selectRelatedItems = state => (item, name) => {
+  const identifiers = selectRelatedIdentifiers(item)(name)
   return identifiers && identifiers.map(identifier => selectItem(state)(identifier))
 }
 

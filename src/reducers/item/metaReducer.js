@@ -18,6 +18,7 @@ import {
   ITEM_ATTRIBUTE_DELETE
 } from '../../constants/attributes'
 import { selectData, selectKey, selectValue } from '../../selectors/action'
+import get from 'lodash.get'
 
 const removeAttribute = (state, action) => {
   const key = selectKey(action)
@@ -97,7 +98,8 @@ const itemMetaReducer = handleActions({
     }
   },
   [ITEM_ATTRIBUTE_RESET]: (state, action) => {
-    const { changedAttributes, deletedAttributes } = state || {}
+    const changedAttributes = get(state, 'changedAttributes')
+    const deletedAttributes = get(state, 'deletedAttributes')
     const newChangedAttributes = changedAttributesReducer(changedAttributes, action)
     const newDeletedAttributes = deletedAttributesReducer(deletedAttributes, action)
     const hasChangedAttributes = !!Object.keys(newChangedAttributes).length
@@ -118,7 +120,8 @@ const itemMetaReducer = handleActions({
     return newState
   },
   [ITEM_ATTRIBUTE_TOGGLE]: (state, action) => {
-    const { changedAttributes, deletedAttributes } = state || {}
+    const changedAttributes = get(state, 'changedAttributes')
+    const deletedAttributes = get(state, 'deletedAttributes')
     const newState = { ...state }
 
     const newChangedAttributes = changedAttributesReducer(changedAttributes, action)
@@ -135,7 +138,8 @@ const itemMetaReducer = handleActions({
     return newState
   },
   [ITEM_ATTRIBUTE_DELETE]: (state, action) => {
-    const { changedAttributes, deletedAttributes } = state
+    const changedAttributes = get(state, 'changedAttributes')
+    const deletedAttributes = get(state, 'deletedAttributes')
     const newState = {
       ...state,
       deletedAttributes: deletedAttributesReducer(deletedAttributes, action),
