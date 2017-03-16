@@ -19,42 +19,9 @@ import {
 } from '../../constants/attributes'
 import { selectData, selectKey, selectValue } from '../../selectors/action'
 import get from 'lodash.get'
+import changedAttributesReducer from './changedAttributesReducer'
 
-const removeAttribute = (state, action) => {
-  const key = selectKey(action)
-  const newState = { ...state }
-  delete newState[key]
-  return newState
-}
-
-const changedAttributesReducer = handleActions({
-  [ITEM_ATTRIBUTE_SET]: (state, action) => {
-    const key = selectKey(action)
-    const value = selectValue(action)
-    return {
-      ...state,
-      [key]: value
-    }
-  },
-  [ITEM_ATTRIBUTE_RESET]: removeAttribute,
-  [ITEM_ATTRIBUTE_TOGGLE]: (state, action) => {
-    const { meta } = action
-    const { value } = meta || {} // value from item.attributes
-    const key = selectKey(action)
-    const newValue = state[key] === undefined ? !value : !state[key]
-    if (newValue === value) {
-      const newState = { ...state }
-      delete newState[key]
-      return newState
-    }
-    return {
-      ...state,
-      [key]: newValue
-    }
-  },
-  [ITEM_ATTRIBUTE_DELETE]: removeAttribute
-}, '')
-
+// TODO: move to own file ./deletedAttributesReducer.js
 const deletedAttributesReducer = handleActions({
   [ITEM_ATTRIBUTE_RESET]: (state, action) => {
     const key = selectKey(action)

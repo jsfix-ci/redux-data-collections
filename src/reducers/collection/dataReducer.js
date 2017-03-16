@@ -43,7 +43,6 @@ const mapActionToItemReducer = (type, id) => (state, action) => {
     }
     return false
   })
-
   if (newState) { return newState }
   return state
 }
@@ -57,7 +56,7 @@ const dataReducer = handleActions({
     const type = selectType(action)
     const id = selectId(action)
     const item = state.find(i => i.type === type && i.id === id)
-    // NOTE: existing item already be handeled by mapActionToItemReducer?
+    // NOTE: existing item already be handled by mapActionToItemReducer?
     // @see itemReducer for existing items
     if (item) { return state } // <-- already added, bail
     return [...state, itemReducer(item, action)]
