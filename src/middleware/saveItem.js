@@ -26,13 +26,15 @@ const saveItem = function * (action) {
     const item = yield select(state => selectItem(state)({ type, id }))
     const newAction = { ...action, payload: { ...action.payload, data: item } }
     const { data, included } = yield call(fetchAction, newAction)
-    console.log('saved', { data, included })
+    console.log('saved:', { type, id }, 'recieved:', { data, included })
     // TODO: only commit if save was successful
     yield put(commitItem({ type, id, options }))
     if (included) {
       yield put(loadIncludedItems({ data: included }))
     }
-    yield put(loadItem({ type, id, data, options }))
+    if (data) {
+      yield put(loadItem({ type, id, data, options }))
+    }
     yield put(endSavingItem({ type, id, options }))
   } catch (error) {
     console.log(error)
