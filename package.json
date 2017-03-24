@@ -31,14 +31,14 @@
     "build": "yarn build:commonjs && yarn build:es && yarn build:umd && yarn build:umd:min",
     "dev": "watch 'yarn build:commonjs' ./src",
     "prepublish": "yarn clean && yarn check:src && yarn build",
+    "postpublish" : "PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]') && git tag $PACKAGE_VERSION && git push --tags",
     "docs:clean": "rimraf _book",
     "docs:prepare": "gitbook install",
     "docs:build": "yarn docs:prepare && gitbook build -g heygrady/redux-data-collections-collections && cp logo/apple-touch-icon.png _book/gitbook/images/apple-touch-icon-precomposed-152.png && cp logo/favicon.ico _book/gitbook/images",
     "docs:watch": "yarn docs:prepare && gitbook serve",
     "docs:publish": "yarn docs:clean && yarn docs:build && cp CNAME _book && cd _book && git init && git commit --allow-empty -m 'update book' && git checkout -b gh-pages && touch .nojekyll && git add . && git commit -am 'update book' && git push git@github.com:heygrady/redux-data-collections-collections gh-pages --force",
     "dev:link": "npm link",
-    "dev:unlink": "npm unlink",
-    "git:tag": "git tag -a ${tag} -m \"tagging repo for release\" && git push origin ${tag}"
+    "dev:unlink": "npm unlink"
   },
   "repository": {
     "type": "git",
