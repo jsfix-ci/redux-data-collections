@@ -1,6 +1,6 @@
 {
   "name": "redux-data-collections",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Redux actions, reducers and selectors for managing data in JSONAPI format.",
   "browser": "dist/redux-data-collections.js",
   "main": "lib/index.js",
@@ -37,7 +37,8 @@
     "docs:watch": "yarn docs:prepare && gitbook serve",
     "docs:publish": "yarn docs:clean && yarn docs:build && cp CNAME _book && cd _book && git init && git commit --allow-empty -m 'update book' && git checkout -b gh-pages && touch .nojekyll && git add . && git commit -am 'update book' && git push git@github.com:heygrady/redux-data-collections-collections gh-pages --force",
     "dev:link": "npm link",
-    "dev:unlink": "npm unlink"
+    "dev:unlink": "npm unlink",
+    "git:tag": "git tag -a ${tag} -m \"tagging repo for release\" && git push origin ${tag}"
   },
   "repository": {
     "type": "git",
