@@ -72,7 +72,7 @@ const relationshipMetaReducer = (config) => {
         return newState
       }
     }, {}),
-    (state, action) => {
+    (state = {}, action) => {
       // cleanup empty attributes, etc
       const { changedData, isDeleted } = state
       const hasChangedData = !(changedData === null || Array.isArray(changedData) && !changedData.length)

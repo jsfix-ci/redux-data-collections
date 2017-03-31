@@ -23,11 +23,12 @@ import {
   RELATIONSHIP_MANY_UNSHIFT
 } from '../../constants/relationships'
 import invariant from 'invariant'
+import { selectKey } from '../../selectors/action'
 
-export const either = (state, data) => state.length && state || data
+export const either = (state, data, defaultData) => state.length && state || data || defaultData
 
 // TODO: rename to createChangedDataReducer
-const changedDataReducer = ({ isOne = false, accepts }) => {
+const changedDataReducer = ({ key, isOne = false, accepts }) => {
   // validate the action
   const isValid = (state, action) => {
     const { payload } = action
@@ -35,9 +36,11 @@ const changedDataReducer = ({ isOne = false, accepts }) => {
       // invariant(false, 'Action must include a payload')
       return false
     }
-    const { key } = payload
-    if (!key) {
+    const actionKey = selectKey(action)
+    if (!actionKey) {
       // invariant(false, 'Payload must include a relationship `key`')
+      return false
+    } else if (actionKey !== key) {
       return false
     }
     return true
@@ -82,9 +85,7 @@ const changedDataReducer = ({ isOne = false, accepts }) => {
       const { data } = payload
       const { relationshipData } = meta
       if (!canAccept(data)) { return state }
-
-      const newState = [...either(state, relationshipData)]
-
+      const newState = [ ...either(state, relationshipData, []) ]
       // bail if already added
       if (newState.some(({ id, type }) => id === data.id && type === data.type)) {
         return newState
