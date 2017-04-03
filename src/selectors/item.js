@@ -1,10 +1,10 @@
-import { selectItems } from './collection'
+import { selectItems, selectRawItems } from './collection'
 import get from 'lodash.get'
 
 // payload: { type, id, key, options }
 export const selectItem = state => payload => {
   const item = selectRawItem(state)(payload)
-  if (!item) { return }
+  if (!item || selectMetaKey(item)('isDeleted')) { return }
   return {
     ...item,
     attributes: selectAttributes(item),
@@ -13,7 +13,7 @@ export const selectItem = state => payload => {
 }
 export const selectRawItem = state => payload => {
   const { type, id, options } = payload
-  const items = selectItems(state)(payload)
+  const items = selectRawItems(state)(payload)
   if (!Array.isArray(items)) { return undefined }
   if (!id && options) {
     const { slug } = options

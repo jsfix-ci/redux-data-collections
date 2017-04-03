@@ -2,9 +2,10 @@ import { put, call, select } from 'redux-saga/effects'
 import { commitItem, beginSavingItem, endSavingItem, loadItem } from '../actions/item'
 import { loadIncludedItems } from '../actions/collection'
 import { selectType, selectId, selectOptions } from '../selectors/action'
-import { selectItem } from '../selectors/item'
+import { selectItem, selectRawItem, selectMetaKey } from '../selectors/item'
 import { getFetchActionFunc } from './'
 import invariant from 'invariant'
+import { ITEM_DESTROY } from '../constants'
 
 const saveItem = function * (action) {
   const fetchAction = getFetchActionFunc()
@@ -17,14 +18,21 @@ const saveItem = function * (action) {
   const id = selectId(action)
   if (!type || !id) {
     // eslint-disable-next-line max-len
-    invariant(false, 'saveItem should define a type and id, like saveItem({ type: \'post\', id: \'some_id\' })')
+    invariant(false, `saveItem should define a type and id, like saveItem({ type: 'post', id: 'some_id' }). Recieved type of '${type}' and id of '${id}'`)
     return
   }
   const options = selectOptions(action)
+  const item = yield select(state => selectItem(state)({ type, id }))
+  const rawItem = yield select(state => selectRawItem(state)({ type, id }))
+  const isDeleted = selectMetaKey(rawItem)('isDeleted')
+  if (!item && !rawItem) {
+    invariant(false, `Cannot save item. No item found for type of '${type}' and id of '${id}'`)
+    return
+  }
   try {
     yield put(beginSavingItem({ type, id, options }))
-    const item = yield select(state => selectItem(state)({ type, id }))
     const newAction = { ...action, payload: { ...action.payload, data: item } }
+    if (isDeleted) { newAction.type = ITEM_DESTROY }
     const { data, included } = yield call(fetchAction, newAction)
     console.log('saved:', { type, id }, 'recieved:', { data, included })
     // TODO: only commit if save was successful

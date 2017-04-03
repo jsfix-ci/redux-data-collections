@@ -5,7 +5,8 @@ import itemReducer from '../item'
 import {
   ITEM_CREATE_NEW,
   ITEM_ADD,
-  ITEM_LOAD
+  ITEM_LOAD,
+  ITEM_COMMIT
 } from '../../constants/item'
 import {
   COLLECTION_LOAD_ITEMS,
@@ -28,6 +29,7 @@ import {
 } from '../../constants/collection'
 import { addItem, updateItem, setMetaKey, deleteMetaKey } from '../../actions/item'
 import { selectType, selectId, selectData, selectKey, selectValue } from '../../selectors/action'
+import { selectMetaKey } from '../../selectors/item'
 
 // routes actions to items using action.meta.id
 const mapActionToItemReducer = (type, id) => (state, action) => {
@@ -65,6 +67,16 @@ const dataReducer = handleActions({
     action = { ...action }
     action.type = ITEM_ADD
     return dataReducer(state, action)
+  },
+  [ITEM_COMMIT]: (state, action) => {
+    const type = selectType(action)
+    const id = selectId(action)
+    const item = state.find(i => i.type === type && i.id === id)
+    const isDeleted = selectMetaKey(item)('isDeleted')
+    if (isDeleted) {
+      return state.filter(item => !(item.type === type && item.id === id))
+    }
+    return state
   },
   [COLLECTION_LOAD_ITEMS]: (state, action) => {
     action = { ...action }

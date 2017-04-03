@@ -1,4 +1,5 @@
 import { selectValueByKey } from './'
+import { selectMetaKey } from './item'
 import { makeSetKey } from '../utils/makeSetkey'
 import { pluralize } from 'inflection'
 
@@ -8,6 +9,8 @@ export const __DEFAULT_ROOT_SELECTOR__ = '@@redux-data-collections/__DEFAULT__'
 export const rootSelectorsByType = {
   [__DEFAULT_ROOT_SELECTOR__]: state => type => state[type] || state[pluralize(type)]
 }
+
+const filterItemIsDeleted = item => !selectMetaKey(item)('isDeleted')
 
 export const setCollectionRootSelector = (type, selector) => {
   rootSelectorsByType[type] = selector
@@ -22,6 +25,11 @@ export const selectRootOfType = state => type => {
 }
 
 export const selectItems = state => ({ type, key, options }) => {
+  const data = selectRawItems(state)({ type, key, options })
+  return data.filter(filterItemIsDeleted)
+}
+
+export const selectRawItems = state => ({ type, key, options }) => {
   const collection = selectRootOfType(state)(type)
   const data = selectCollectionData(collection)
   if (key) {
@@ -50,11 +58,13 @@ export const selectSet = state => ({ type, key, options }) => {
   return set[page]
 }
 
+// retrieve a single page
 export const selectSetItems = state => ({ type, key, options }) => {
   const { data } = selectSet(state)({ type, key, options })
   return data
 }
 
+// merge all pages into one big collection
 export const selectFullSetItems = state => ({ type, key, options }) => {
   const collection = selectRootOfType(state)(type)
   const meta = selectCollectionMeta(collection)

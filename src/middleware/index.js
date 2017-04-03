@@ -1,8 +1,16 @@
 import { takeEvery } from 'redux-saga/effects'
-import { COLLECTION_FETCH_ITEMS, ITEM_FETCH, ITEM_SAVE } from '../constants'
+import {
+  COLLECTION_FETCH_ITEMS,
+  ITEM_FETCH,
+  ITEM_SAVE,
+  ITEM_DESTROY
+} from '../constants'
+
+// TODO: rename fetchItems to fetchCollection
 import fetchItems from './fetchItems'
 import fetchItem from './fetchItem'
 import saveItem from './saveItem'
+import destroyItem from './destroyItem'
 
 // NOTE: you need to define fetchAction as part of setup: setFetchActionFunc(myCustomFetch)
 let fetchAction
@@ -27,5 +35,6 @@ export const watchActions = (sagas) => {
 export default watchActions({
   [COLLECTION_FETCH_ITEMS]: fetchItems,
   [ITEM_SAVE]: saveItem,
-  [ITEM_FETCH]: fetchItem
+  [ITEM_FETCH]: fetchItem,
+  [ITEM_DESTROY]: destroyItem
 })

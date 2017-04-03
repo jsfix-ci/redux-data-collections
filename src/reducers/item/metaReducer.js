@@ -1,5 +1,6 @@
 import { handleActions } from 'redux-actions'
 import {
+  ITEM_DELETE,
   ITEM_COMMIT,
   ITEM_BEGIN_LOADING,
   ITEM_END_LOADING,
@@ -20,20 +21,12 @@ import {
 import { selectData, selectKey, selectValue } from '../../selectors/action'
 import get from 'lodash.get'
 import changedAttributesReducer from './changedAttributesReducer'
-
-// TODO: move to own file ./deletedAttributesReducer.js
-const deletedAttributesReducer = handleActions({
-  [ITEM_ATTRIBUTE_RESET]: (state, action) => {
-    const key = selectKey(action)
-    return state.filter(value => !key) // TODO: this looks wrong
-  },
-  [ITEM_ATTRIBUTE_DELETE]: (state, action) => {
-    const key = selectKey(action)
-    return [ ...state, key ] // TODO: this looks wrong
-  }
-}, [])
+import deletedAttributesReducer from './deletedAttributesReducer'
 
 const itemMetaReducer = handleActions({
+  [ITEM_DELETE]: (state, action) => {
+    return { ...state, isDeleted: true }
+  },
   [ITEM_COMMIT]: (state, action) => {
     const newState = { ...state, isSaved: false }
     delete newState.changedAttributes
