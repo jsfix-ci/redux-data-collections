@@ -56,8 +56,8 @@ export const selectItemIsLoaded = state => payload => {
 }
 
 export const selectItemAttribute = state => payload => {
-  const item = selectItem(state)(payload)
-  const { key } = payload
+  const { type, id, key } = payload
+  const item = selectItem(state)({ type, id })
   return selectAttribute(item)(key)
 }
 

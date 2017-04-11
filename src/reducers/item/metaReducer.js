@@ -48,9 +48,7 @@ const itemMetaReducer = handleActions({
     }
   },
   [ITEM_ATTRIBUTE_SET]: (state, action) => {
-    const { meta } = state
-    const { changedAttributes } = meta || {}
-
+    const { changedAttributes } = state
     return {
       ...state,
       changedAttributes: changedAttributesReducer(changedAttributes, action),
