@@ -2,7 +2,7 @@ import { combineReducers } from 'redux'
 import setsDataReducer from './setsDataReducer'
 import setsMetaReducer from './setsMetaReducer'
 import { selectKey, selectOptions } from '../../selectors/action'
-import { makeSetKey } from '../../utils/makeSetkey'
+import { makeSetKey } from '../../utils/makeSetKey'
 
 // set page reducer
 const setPageReducer = combineReducers({

@@ -1,6 +1,6 @@
 import { selectValueByKey } from './'
 import { selectMetaKey } from './item'
-import { makeSetKey } from '../utils/makeSetkey'
+import { makeSetKey } from '../utils/makeSetKey'
 import { pluralize } from 'inflection'
 
 // allow for setting the default root selector by type
