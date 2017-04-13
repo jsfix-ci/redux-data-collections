@@ -25,7 +25,7 @@ import {
 import invariant from 'invariant'
 import { selectKey } from '../../selectors/action'
 
-export const either = (state, data, defaultData = []) => state || data || defaultData
+export const either = (state, data, defaultData = []) => state.length && state || data || defaultData
 
 // TODO: rename to createChangedDataReducer
 const changedDataReducer = ({ key, isOne = false, accepts }) => {
