@@ -30,6 +30,7 @@ import {
   // RELATIONSHIP_MANY_UNSHIFT
 } from '../../constants/relationships'
 import { ITEM_COMMIT } from '../../constants/item'
+import hasCorrectKey from './utils/hasCorrectKey'
 import changedDataReducer from './changedDataReducer'
 
 const deleteKey = (state = {}, key) => {
@@ -49,16 +50,19 @@ const relationshipMetaReducer = (config) => {
     }),
     handleActions({
       [RELATIONSHIP_RESET]: (state, action) => {
+        if (!hasCorrectKey(config, action)) { return state }
         let newState = { ...state }
         newState = deleteKey(newState, 'changedData')
         newState = deleteKey(newState, 'isDeleted')
         return newState
       },
       [RELATIONSHIP_ONE_DELETE]: (state, action) => {
+        if (!hasCorrectKey(config, action)) { return state }
         if (!isOne) { return state }
         return { ...state, isDeleted: true }
       },
       [RELATIONSHIP_MANY_DELETE]: (state, action) => {
+        if (!hasCorrectKey(config, action)) { return state }
         if (isOne) { return state }
         const { changedData } = state
         const isDeleted = changedData === null || Array.isArray(changedData) && !changedData.length

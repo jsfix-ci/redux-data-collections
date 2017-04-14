@@ -7,7 +7,7 @@ export const oneReducer = ({ key, isOne, accepts }) => handleActions({
   [ITEM_COMMIT]: (state, action) => {
     const { meta } = action
     const { changedData, isDeleted } = meta
-    return isDeleted ? [] : changedData || state
+    return isDeleted ? {} : changedData || state
   },
   PLACEHOLDER
 }, {})
