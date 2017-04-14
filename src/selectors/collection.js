@@ -7,7 +7,7 @@ import { pluralize } from 'inflection'
 // TODO: this doesn't work as expected
 export const __DEFAULT_ROOT_SELECTOR__ = '@@redux-data-collections/__DEFAULT__'
 export const rootSelectorsByType = {
-  [__DEFAULT_ROOT_SELECTOR__]: state => type => state[type] || state[pluralize(type)]
+  [__DEFAULT_ROOT_SELECTOR__]: state => type => type && (state[type] || state[pluralize(type)])
 }
 
 const filterItemIsDeleted = item => !selectMetaKey(item)('isDeleted')
