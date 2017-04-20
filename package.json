@@ -1,6 +1,6 @@
 {
   "name": "redux-data-collections",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Redux actions, reducers and selectors for managing data in JSONAPI format.",
   "browser": "dist/redux-data-collections.js",
   "main": "lib/index.js",
