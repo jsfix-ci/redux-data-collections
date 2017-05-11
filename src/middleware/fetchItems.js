@@ -4,6 +4,7 @@ import { selectType, selectKey, selectOptions } from '../selectors/action'
 import { getFetchActionFunc } from './'
 import invariant from 'invariant'
 
+// TODO: rename fetchCollection
 const fetchItems = function * (action) {
   const fetchAction = getFetchActionFunc()
   // TODO: add an invariant here

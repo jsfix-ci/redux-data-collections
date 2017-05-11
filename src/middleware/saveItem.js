@@ -1,5 +1,5 @@
 import { put, call, select } from 'redux-saga/effects'
-import { commitItem, beginSavingItem, endSavingItem, loadItem } from '../actions/item'
+import { commitItem, beginSavingItem, endSavingItem, loadItem, setMetaKey, deleteMetaKey } from '../actions/item'
 import { loadIncludedItems } from '../actions/collection'
 import { selectType, selectId, selectOptions } from '../selectors/action'
 import { selectItem, selectRawItem, selectMetaKey } from '../selectors/item'
@@ -33,8 +33,16 @@ const saveItem = function * (action) {
     yield put(beginSavingItem({ type, id, options }))
     const newAction = { ...action, payload: { ...action.payload, data: item } }
     if (isDeleted) { newAction.type = ITEM_DESTROY }
-    const { data, included } = yield call(fetchAction, newAction)
-    console.log('saved:', { type, id }, 'recieved:', { data, included })
+    const { data, included, errors } = yield call(fetchAction, newAction)
+    console.log(
+      '@@redux-data/middleware/saveItem/fetchAction--after',
+      { saved: { type, id }, recieved: { data, included, errors } }
+    )
+    if (errors && Array.isArray(errors) && errors.length) {
+      yield put(setMetaKey({ type, id, key: 'errors', value: errors }))
+    } else {
+      yield put(deleteMetaKey({ type, id, key: 'errors' }))
+    }
     // TODO: only commit if save was successful
     yield put(commitItem({ type, id, options }))
     if (included) {
@@ -45,7 +53,10 @@ const saveItem = function * (action) {
     }
     yield put(endSavingItem({ type, id, options }))
   } catch (error) {
-    console.log(error)
+    console.error(
+      '@@redux-data/middleware/saveItem/throw',
+      { error }
+    )
   }
 }
 
