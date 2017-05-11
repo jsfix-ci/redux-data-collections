@@ -18,6 +18,8 @@ import {
   ITEM_END_LOADING,
   ITEM_BEGIN_SAVING,
   ITEM_END_SAVING,
+  ITEM_ERROR_SAVING,
+  ITEM_FAIL_SAVING,
   ITEM_META_SET,
   ITEM_META_TOGGLE,
   ITEM_META_DELETE
@@ -41,6 +43,9 @@ export const beginLoadingItem = createStandardAction(ITEM_BEGIN_LOADING)
 export const endLoadingItem = createStandardAction(ITEM_END_LOADING)
 export const beginSavingItem = createStandardAction(ITEM_BEGIN_SAVING)
 export const endSavingItem = createStandardAction(ITEM_END_SAVING)
+export const errorSavingItem = createStandardAction(ITEM_ERROR_SAVING)
+export const failSavingItem = createStandardAction(ITEM_FAIL_SAVING)
+
 export const setMetaKey = createStandardAction(ITEM_META_SET)
 export const toggleMetaKey = createStandardAction(ITEM_META_TOGGLE)
 export const deleteMetaKey = createStandardAction(ITEM_META_DELETE)

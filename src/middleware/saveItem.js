@@ -1,11 +1,21 @@
 import { put, call, select } from 'redux-saga/effects'
-import { commitItem, beginSavingItem, endSavingItem, loadItem, setMetaKey, deleteMetaKey } from '../actions/item'
+import {
+  commitItem,
+  beginSavingItem,
+  endSavingItem,
+  errorSavingItem,
+  failSavingItem,
+  loadItem,
+  setMetaKey,
+  deleteMetaKey } from '../actions/item'
 import { loadIncludedItems } from '../actions/collection'
 import { selectType, selectId, selectOptions } from '../selectors/action'
 import { selectItem, selectRawItem, selectMetaKey } from '../selectors/item'
 import { getFetchActionFunc } from './'
 import invariant from 'invariant'
 import { ITEM_DESTROY } from '../constants'
+
+const hasErrors = errors => errors && Array.isArray(errors) && errors.length
 
 const saveItem = function * (action) {
   const fetchAction = getFetchActionFunc()
@@ -32,31 +42,40 @@ const saveItem = function * (action) {
   try {
     yield put(beginSavingItem({ type, id, options }))
     const newAction = { ...action, payload: { ...action.payload, data: item } }
+
     if (isDeleted) { newAction.type = ITEM_DESTROY }
+
     const { data, included, errors } = yield call(fetchAction, newAction)
+
     console.log(
       '@@redux-data/middleware/saveItem/fetchAction--after',
       { saved: { type, id }, recieved: { data, included, errors } }
     )
-    if (errors && Array.isArray(errors) && errors.length) {
-      yield put(setMetaKey({ type, id, key: 'errors', value: errors }))
-    } else {
+
+    if (!hasErrors(errors)) {
+      // clear past errors
       yield put(deleteMetaKey({ type, id, key: 'errors' }))
+
+      // commit any changes
+      yield put(commitItem({ type, id, options }))
+
+      // load any included items that were returned
+      if (included) { yield put(loadIncludedItems({ data: included })) }
+
+      // re-load the item if it was returned
+      if (data) { yield put(loadItem({ type, id, data, options })) }
+      yield put(endSavingItem({ type, id, options }))
+    } else {
+      // add the errors to the object
+      yield put(setMetaKey({ type, id, key: 'errors', value: errors }))
+      yield put(errorSavingItem({ type, id, options, errors }))
     }
-    // TODO: only commit if save was successful
-    yield put(commitItem({ type, id, options }))
-    if (included) {
-      yield put(loadIncludedItems({ data: included }))
-    }
-    if (data) {
-      yield put(loadItem({ type, id, data, options }))
-    }
-    yield put(endSavingItem({ type, id, options }))
   } catch (error) {
     console.error(
       '@@redux-data/middleware/saveItem/throw',
       { error }
     )
+    yield put(failSavingItem({ type, id, errors: [error] }))
   }
 }
 

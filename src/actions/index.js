@@ -7,12 +7,16 @@ import { createAction as defaultCreateAction } from 'redux-actions'
 - type, id -- to identify the entity, blank id means collection
 - data -- either an entity or a collection (array) of entities
 - options -- an object containing keys and values
-- key -- a string that would be valid as a key in an attributes or relationships object
+- key -- a string that would be valid as a key in an attributes, meta or relationships object
 - value -- any value that wold be appropriate in an attribute or meta object
 - func -- a callback function to be called within a reducer (if supported by reducer)
 **/
 // TODO: typecheck the standard keys below
-export const payloadCreator = ({ data, options, key, value, func } = {}) => ({ data, options, key, value, func })
+export const payloadCreator = ({
+  data, options, key, value, func, errors
+} = {}) => ({
+  data, options, key, value, func, errors
+})
 export const metaCreator = ({ type, id } = {}) => ({ type, id })
 
 export const createStandardAction = type => defaultCreateAction(type, payloadCreator, metaCreator)
