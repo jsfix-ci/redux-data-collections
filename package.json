@@ -31,7 +31,7 @@
     "build": "yarn build:commonjs && yarn build:es && yarn build:umd && yarn build:umd:min",
     "dev": "watch 'yarn build:commonjs' ./src",
     "prepublish": "yarn clean && yarn check:src && yarn build",
-    "postpublish" : "PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]') && git tag $PACKAGE_VERSION && git push --tags",
+    "postpublish": "PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]') && git tag $PACKAGE_VERSION && git push --tags",
     "docs:clean": "rimraf _book",
     "docs:prepare": "gitbook install",
     "docs:build": "yarn docs:prepare && gitbook build -g heygrady/redux-data-collections && cp logo/apple-touch-icon.png _book/gitbook/images/apple-touch-icon-precomposed-152.png && cp logo/favicon.ico _book/gitbook/images",
@@ -62,7 +62,7 @@
     "reduce-reducers": "^0.1.2",
     "redux": "^3.6.0",
     "redux-actions": "^1.2.0",
-    "redux-saga": "^0.14.3"
+    "redux-saga": "^1.1.3"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
